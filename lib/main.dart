@@ -11,9 +11,9 @@ class SmartMirrorApp extends StatelessWidget {
     return MaterialApp(
       title: 'Welcome to Flutter',
       home: Scaffold(
-        appBar: AppBar(
+        /*appBar: AppBar(
           title: Text('Welcome to Flutter'),
-        ),
+        ),*/
         body: Center(
           child: ModulesList(),
         ),
@@ -28,38 +28,44 @@ class ModulesList extends StatefulWidget {
 }
 
 class _ModulesListState extends State<ModulesList> {
-  List<Module> modules = new List<Module>();
+  Future<List<Module>> futureModules;
 
   @override
   void initState() {
     super.initState();
-    setModules();
-  }
-
-  void setModules() {
-    modules
-        .add(new Module(id: 1, name: "Nummer 1", order: 1, position: "hest"));
-    modules
-        .add(new Module(id: 2, name: "Nummer 2", order: 2, position: "hests"));
-    modules.add(
-        new Module(id: 3, name: "Nummer 3", order: 3, position: "Henning"));
+    futureModules = fetchModuleOverview("192.168.1.43:5000");
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Module overview')),
-      body: _buildList(),
+      body: FutureBuilder<List<Module>>(
+        future: futureModules,
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            return _buildList(snapshot.data);
+          } else if (snapshot.hasError) {
+            return Text("${snapshot.error}");
+          }
+
+          // By default, show a loading spinner.
+          return CircularProgressIndicator();
+        },
+      ),
     );
   }
+}
 
-  Widget _buildList() {
-    return ListView.builder(
-        itemCount: 3,
-        padding: EdgeInsets.all(16.0),
-        itemBuilder: (context, i) {
-          //if (i.isOdd) return Divider();
-          return ListTile(title: Text(modules[i].name));
-        });
-  }
+Widget _buildList(List<Module> modules) {
+  return ListView.builder(
+      itemCount: modules.length,
+      padding: EdgeInsets.all(16.0),
+      itemBuilder: (context, i) {
+        return ListTile(title: Text("${modules[i].id}: ${modules[i].module}")
+            /*onTap: () {
+
+            },*/
+            );
+      });
 }

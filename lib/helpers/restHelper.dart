@@ -3,17 +3,28 @@ import 'dart:convert';
 
 import 'package:smartmirror/dto/module.dart';
 
-Future<Module> fetchModule(int id) async {
-  final response =
-      await http.get('https://jsonplaceholder.typicode.com/albums/1');
+Future<List<Module>> fetchModuleOverview(String remote) async {
+  final response = await http.get('http://$remote/config/modules/');
 
   if (response.statusCode == 200) {
-    // If the server did return a 200 OK response,
-    // then parse the JSON.
+    Map<String, dynamic> data = json.decode(response.body);
+    List<Module> modules = new List<Module>();
+
+    data["modules"].forEach(
+        (x) => modules.add(Module(id: x["_meta"]["id"], module: x["module"])));
+
+    return modules;
+  } else {
+    throw Exception('failed to load modules');
+  }
+}
+
+Future<Module> fetchModule(String remote, int id) async {
+  final response = await http.get('http://$remote/config/modules/$id/');
+
+  if (response.statusCode == 200) {
     return Module.fromJson(json.decode(response.body));
   } else {
-    // If the server did not return a 200 OK response,
-    // then throw an exception.
-    throw Exception('Failed to load album');
+    throw Exception('Failed to load module $id');
   }
 }
