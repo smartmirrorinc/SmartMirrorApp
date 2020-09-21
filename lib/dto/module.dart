@@ -5,10 +5,7 @@ class Module {
   Module({this.id, this.module});
 
   factory Module.fromJson(Map<String, dynamic> json) {
-    return Module(
-      id: json['_meta']['id'],
-      module: json['module'],
-    );
+    return Module(id: json['_meta']['id'], module: json['module']);
   }
 }
 

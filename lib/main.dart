@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartmirror/helpers/restHelper.dart';
+import 'package:smartmirror/statelessWidgets/ModuleOverview.dart';
 
 import 'dto/module.dart';
 
@@ -33,7 +34,7 @@ class _ModulesListState extends State<ModulesList> {
   @override
   void initState() {
     super.initState();
-    futureModules = fetchModuleOverview("192.168.1.43:5000");
+    futureModules = fetchModuleList("192.168.1.44:5000");
   }
 
   @override
@@ -62,10 +63,15 @@ Widget _buildList(List<Module> modules) {
       itemCount: modules.length,
       padding: EdgeInsets.all(16.0),
       itemBuilder: (context, i) {
-        return ListTile(title: Text("${modules[i].id}: ${modules[i].module}")
-            /*onTap: () {
-
-            },*/
+        return ListTile(
+          title: Text("${modules[i].id}: ${modules[i].module}"),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ModuleOverviewApp(module: modules[i])),
             );
+          },
+        );
       });
 }
