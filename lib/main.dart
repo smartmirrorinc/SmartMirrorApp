@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartmirror/helpers/discovery.dart';
 import 'package:smartmirror/helpers/restHelper.dart';
 import 'package:smartmirror/statelessWidgets/ModuleOverview.dart';
 
@@ -30,11 +31,21 @@ class ModulesList extends StatefulWidget {
 
 class _ModulesListState extends State<ModulesList> {
   Future<List<Module>> futureModules;
+  MmmpServer server;
 
   @override
   void initState() {
     super.initState();
-    futureModules = fetchModuleList("192.168.1.44:5000");
+    futureModules = _discoverAndFetchModules();
+  }
+
+  Future<List<Module>> _discoverAndFetchModules() async {
+    final List<MmmpServer> servers = await discoverServers();
+    if (servers.length < 1) {
+      throw Exception('failed to discover server');
+    }
+    server = servers[0];
+    return fetchModuleList(server);
   }
 
   @override
@@ -45,7 +56,7 @@ class _ModulesListState extends State<ModulesList> {
         future: futureModules,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _buildList(snapshot.data);
+            return _buildList(server, snapshot.data);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -58,7 +69,7 @@ class _ModulesListState extends State<ModulesList> {
   }
 }
 
-Widget _buildList(List<Module> modules) {
+Widget _buildList(MmmpServer server, List<Module> modules) {
   return ListView.builder(
       itemCount: modules.length,
       padding: EdgeInsets.all(16.0),
@@ -69,7 +80,8 @@ Widget _buildList(List<Module> modules) {
             Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) => ModuleOverviewApp(module: modules[i])),
+                  builder: (context) =>
+                      ModuleOverviewApp(server: server, module: modules[i])),
             );
           },
         );

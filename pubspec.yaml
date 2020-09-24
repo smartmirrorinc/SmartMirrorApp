@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   http: ^0.12.2
+  multicast_dns: ^0.2.2
 
 
   # The following adds the Cupertino Icons font to your application.

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:smartmirror/dto/module.dart';
+import 'package:smartmirror/helpers/discovery.dart';
 import 'package:smartmirror/helpers/restHelper.dart';
 
 class ModuleOverviewApp extends StatelessWidget {
   final Module module;
+  final MmmpServer server;
 
-  ModuleOverviewApp({Key key, @required this.module}) : super(key: key);
+  ModuleOverviewApp({Key key, @required this.server, @required this.module})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +18,7 @@ class ModuleOverviewApp extends StatelessWidget {
         title: Text(module.module),
       ),
       body: Center(
-        child: ModuleOverview(module: module),
+        child: ModuleOverview(server: server, module: module),
       ),
     );
   }
@@ -23,8 +26,10 @@ class ModuleOverviewApp extends StatelessWidget {
 
 class ModuleOverview extends StatefulWidget {
   final Module module;
+  final MmmpServer server;
 
-  ModuleOverview({Key key, @required this.module}) : super(key: key);
+  ModuleOverview({Key key, @required this.server, @required this.module})
+      : super(key: key);
 
   @override
   _ModuleOverviewState createState() => _ModuleOverviewState();
@@ -36,7 +41,9 @@ class _ModuleOverviewState extends State<ModuleOverview> {
   @override
   void initState() {
     super.initState();
-    futureModule = fetchModule("192.168.1.44:5000", widget.module.id);
+
+    futureModule = fetchModule(
+        "${widget.server.ip}:${widget.server.port}", widget.module.id);
   }
 
   @override
