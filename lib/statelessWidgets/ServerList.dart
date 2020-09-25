@@ -50,8 +50,9 @@ class _ServerListState extends State<ServerList> {
   }
 
   Widget _buildList(List<MmmpServer> servers) {
+    Widget widget;
     if (servers.length > 0) {
-      return ListView.builder(
+      widget = ListView.builder(
           itemCount: servers.length,
           padding: EdgeInsets.all(16.0),
           itemBuilder: (context, i) {
@@ -68,16 +69,21 @@ class _ServerListState extends State<ServerList> {
             );
           });
     } else {
-      return Column(children: [
-        ListTile(
-            title: Text("No servers found. Retry?"),
-            onTap: () {
-              setState(() {
-                futureServers = discoverServers();
-              });
-            }),
-        //ListTile(title: Text("Enter IP"))
-      ]);
+      // wrap in stack w/ listview for RefreshIndicator to work
+      widget = Stack(
+        children: <Widget>[
+          ListView(),
+          Center(child: Text("No servers found. Pull down to refresh."))
+        ],
+      );
     }
+
+    return RefreshIndicator(child: widget, onRefresh: _refresh);
+  }
+
+  Future<void> _refresh() async {
+    setState(() {
+      futureServers = discoverServers();
+    });
   }
 }
