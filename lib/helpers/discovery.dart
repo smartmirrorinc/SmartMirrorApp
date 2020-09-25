@@ -34,8 +34,16 @@ Future<List<MmmpServer>> discoverServers() async {
         debugPrint('Service instance found at '
             '${srv.target}:${srv.port} with ${ip.address}.');
 
-        servers.add(MmmpServer(
-            host: srv.target, ip: ip.address.address, port: srv.port));
+        // may discover the same server twice
+        bool exists = false;
+        for (MmmpServer server in servers)
+          if (server.host == srv.target &&
+              server.ip == ip.address.address &&
+              server.port == srv.port) exists = true;
+
+        if (!exists)
+          servers.add(MmmpServer(
+              host: srv.target, ip: ip.address.address, port: srv.port));
       }
     }
   }

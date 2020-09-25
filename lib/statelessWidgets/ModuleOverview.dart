@@ -12,7 +12,6 @@ class ModuleOverviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use the Todo to create the UI.
     return Scaffold(
       appBar: AppBar(
         title: Text(module.module),
