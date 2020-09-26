@@ -42,7 +42,7 @@ class _ModulesListState extends State<ModulesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Module overview')),
+      appBar: AppBar(title: Text('Module list')),
       body: FutureBuilder<List<Module>>(
         future: futureModules,
         builder: (context, snapshot) {

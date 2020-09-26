@@ -10,9 +10,8 @@ class MmmpServer {
   MmmpServer({this.host, this.ip, this.port});
 }
 
-Future<List<MmmpServer>> discoverServers() async {
+Future<void> discoverServers(Function callback) async {
   const String name = '_mmmp._tcp';
-  List<MmmpServer> servers = new List<MmmpServer>();
 
   // https://github.com/flutter/flutter/issues/27346
   var factory =
@@ -24,6 +23,8 @@ Future<List<MmmpServer>> discoverServers() async {
   var client = MDnsClient(rawDatagramSocketFactory: factory);
   await client.start();
 
+  int found = 0;
+
   await for (PtrResourceRecord ptr in client
       .lookup<PtrResourceRecord>(ResourceRecordQuery.serverPointer(name))) {
     await for (SrvResourceRecord srv in client.lookup<SrvResourceRecord>(
@@ -34,20 +35,14 @@ Future<List<MmmpServer>> discoverServers() async {
         debugPrint('Service instance found at '
             '${srv.target}:${srv.port} with ${ip.address}.');
 
-        // may discover the same server twice
-        bool exists = false;
-        for (MmmpServer server in servers)
-          if (server.host == srv.target &&
-              server.ip == ip.address.address &&
-              server.port == srv.port) exists = true;
-
-        if (!exists)
-          servers.add(MmmpServer(
-              host: srv.target, ip: ip.address.address, port: srv.port));
+        callback(MmmpServer(
+            host: srv.target, ip: ip.address.address, port: srv.port));
+        found++;
       }
     }
   }
   client.stop();
 
-  return servers;
+  // if timeout with no servers found, callback with null
+  if (found == 0) callback(null);
 }

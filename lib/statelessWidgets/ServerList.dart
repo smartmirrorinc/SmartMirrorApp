@@ -22,36 +22,35 @@ class ServerList extends StatefulWidget {
 }
 
 class _ServerListState extends State<ServerList> {
-  Future<List<MmmpServer>> futureServers;
+  List<MmmpServer> servers;
 
   @override
   void initState() {
     super.initState();
-    futureServers = discoverServers();
+    _refresh();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<List<MmmpServer>>(
-        future: futureServers,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return _buildList(snapshot.data);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-
-          // By default, show a loading spinner.
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
-    );
+    return Scaffold(body: _buildList(servers));
   }
 
   Widget _buildList(List<MmmpServer> servers) {
     Widget widget;
-    if (servers.length > 0) {
+    if (servers == null) {
+      // no servers found, timed out
+      // wrap in stack w/ listview for RefreshIndicator to work
+      widget = Stack(
+        children: <Widget>[
+          ListView(),
+          Center(child: Text("No servers found. Pull down to refresh."))
+        ],
+      );
+    } else if (servers.length == 0) {
+      // no servers found yet
+      widget = Center(child: CircularProgressIndicator());
+    } else {
+      // servers found
       widget = ListView.builder(
           itemCount: servers.length,
           padding: EdgeInsets.all(16.0),
@@ -68,14 +67,6 @@ class _ServerListState extends State<ServerList> {
               },
             );
           });
-    } else {
-      // wrap in stack w/ listview for RefreshIndicator to work
-      widget = Stack(
-        children: <Widget>[
-          ListView(),
-          Center(child: Text("No servers found. Pull down to refresh."))
-        ],
-      );
     }
 
     return RefreshIndicator(child: widget, onRefresh: _refresh);
@@ -83,7 +74,29 @@ class _ServerListState extends State<ServerList> {
 
   Future<void> _refresh() async {
     setState(() {
-      futureServers = discoverServers();
+      // clear the list
+      servers = new List<MmmpServer>();
+
+      // attempt to discover...
+      discoverServers((x) {
+        if (x == null) {
+          // timeout with no discoveries
+          servers = null;
+        } else {
+          // for each discovery, add the server to the list (unless previously
+          // discovered)
+          bool exists = false;
+          for (MmmpServer server in servers)
+            if (server.host == x.host &&
+                server.ip == x.ip &&
+                server.port == x.port) exists = true;
+
+          if (!exists) servers.add(x);
+        }
+
+        // rebuild UI
+        setState(() {});
+      });
     });
   }
 }
