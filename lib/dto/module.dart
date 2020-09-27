@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 Module moduleFromString(Map<String, dynamic> json) {
   Map modules = {
     "alert": ModuleAlert.instantiate,
@@ -48,8 +50,12 @@ ModulePosition modulePositionFromString(String pos) {
 class Module {
   final int id;
   final String module;
+  List<ListTile> widgets;
 
-  Module(this.id, this.module);
+  Module(this.id, this.module) {
+    widgets = new List<ListTile>();
+    widgets.add(ListTile(title: Text("ID: $id")));
+  }
 
   factory Module.fromJson(Map<String, dynamic> json) {
     return Module(json['_meta']['id'], json['module']);
@@ -66,9 +72,11 @@ class Module {
 class PositionedModule extends Module {
   final ModulePosition position;
 
-  PositionedModule(int id, String module, ModulePosition pos) :
-    position = pos,
-    super(id, module);
+  PositionedModule(int id, String module, ModulePosition pos)
+      : position = pos,
+        super(id, module) {
+    widgets.add(new ListTile(title: Text("Position: ${position.toString()}")));
+  }
 
   factory PositionedModule.fromJson(Map<String, dynamic> json) {
     return PositionedModule(json['_meta']['id'], json['module'],
