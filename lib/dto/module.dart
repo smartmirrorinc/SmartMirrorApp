@@ -50,12 +50,9 @@ ModulePosition modulePositionFromString(String pos) {
 class Module {
   final int id;
   final String module;
-  List<ListTile> widgets;
+  List<Widget> widgets;
 
-  Module(this.id, this.module) {
-    widgets = new List<ListTile>();
-    widgets.add(ListTile(title: Text("ID: $id")));
-  }
+  Module(this.id, this.module);
 
   factory Module.fromJson(Map<String, dynamic> json) {
     return Module(json['_meta']['id'], json['module']);
@@ -67,15 +64,32 @@ class Module {
   }
 
   static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
+
+  void buildWidgets(Function refresh) {
+    widgets = new List<Widget>();
+    widgets.add(ListTile(title: Text("ID: $id")));
+    widgets.add(ListTile(title: Text("Module: $module")));
+  }
 }
 
 class PositionedModule extends Module {
-  final ModulePosition position;
+  ModulePosition position;
 
   PositionedModule(int id, String module, ModulePosition pos)
       : position = pos,
-        super(id, module) {
-    widgets.add(new ListTile(title: Text("Position: ${position.toString()}")));
+        super(id, module);
+
+  @override
+  void buildWidgets(Function refresh) {
+    super.buildWidgets(refresh);
+
+    Widget dropdown = getPosDropDown(refresh);
+    Widget icon = Icon(Icons.picture_in_picture);
+    ListTile tile = ListTile(leading: icon, title: Text("Position"));
+    ListTile tile2 = ListTile(title: dropdown);
+    widgets.add(Card(
+        child:
+            Column(mainAxisSize: MainAxisSize.max, children: [tile, tile2])));
   }
 
   factory PositionedModule.fromJson(Map<String, dynamic> json) {
@@ -86,6 +100,30 @@ class PositionedModule extends Module {
   @override
   String toString() {
     return "{id:$id, module:$module, position:${position.toString()}}";
+  }
+
+  Widget getPosDropDown(Function refresh) {
+    return DropdownButton<ModulePosition>(
+      value: position,
+      icon: Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (ModulePosition newValue) {
+        position = newValue;
+        refresh(this);
+      },
+      items: ModulePosition.values.map((ModulePosition value) {
+        return DropdownMenuItem<ModulePosition>(
+          value: value,
+          child: Text(value.toString()),
+        );
+      }).toList(),
+    );
   }
 }
 

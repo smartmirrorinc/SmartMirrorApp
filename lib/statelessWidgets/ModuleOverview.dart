@@ -35,33 +35,30 @@ class ModuleOverview extends StatefulWidget {
 }
 
 class _ModuleOverviewState extends State<ModuleOverview> {
-  Future<Module> futureModule;
+  Module module;
 
   @override
   void initState() {
     super.initState();
+    fetchModule(
+        "${widget.server.ip}:${widget.server.port}", widget.module.id, refresh);
+  }
 
-    futureModule = fetchModule(
-        "${widget.server.ip}:${widget.server.port}", widget.module.id);
+  void refresh(Module module) {
+    setState(() {
+      this.module = module;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: FutureBuilder<Module>(
-        future: futureModule,
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            //return Text(snapshot.data.toString());
-            return ListView(children: snapshot.data.widgets);
-          } else if (snapshot.hasError) {
-            return Text("${snapshot.error}");
-          }
-
-          // By default, show a loading spinner.
-          return Center(child: CircularProgressIndicator());
-        },
-      ),
-    );
+    return Builder(builder: (context) {
+      if (module != null) {
+        module.buildWidgets(refresh);
+        return ListView(children: module.widgets);
+      } else {
+        return Center(child: CircularProgressIndicator());
+      }
+    });
   }
 }
