@@ -1,41 +1,213 @@
+Module moduleFromString(Map<String, dynamic> json) {
+  Map modules = {
+    "alert": ModuleAlert.instantiate,
+    "clock": ModuleClock.instantiate,
+    "MMM-PIR-Sensor": ModulePirSensor.instantiate,
+    "newsfeed": ModuleNewsfeed.instantiate,
+    "calendar": ModuleCalendar.instantiate,
+    "compliments": ModuleCompliments.instantiate,
+    "MMM-ip": ModuleIP.instantiate,
+    "updatenotification": ModuleUpdateNotification.instantiate,
+  };
+
+  if (!modules.keys.contains(json["module"])) {
+    return null;
+  } else {
+    return modules[json["module"]](json);
+  }
+}
+
+enum ModulePosition {
+  top_bar,
+  top_left,
+  top_center,
+  top_right,
+  upper_third,
+  middle_center,
+  lower_third,
+  bottom_left,
+  bottom_center,
+  bottom_right,
+  bottom_bar,
+  fullscreen_above,
+  fullscreen_below
+}
+
+ModulePosition modulePositionFromString(String pos) {
+  Iterable<ModulePosition> p = ModulePosition.values
+      .where((x) => x.toString() == ("ModulePosition." + pos));
+
+  if (p.length < 1) {
+    return null;
+  } else {
+    assert(p.length == 1);
+    return p.first;
+  }
+}
+
 class Module {
   final int id;
   final String module;
 
-  Module({this.id, this.module});
+  Module(this.id, this.module);
 
   factory Module.fromJson(Map<String, dynamic> json) {
-    return Module(id: json['_meta']['id'], module: json['module']);
+    return Module(json['_meta']['id'], json['module']);
   }
+
+  @override
+  String toString() {
+    return "{id:$id, module:$module}";
+  }
+
+  static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
 }
 
 class PositionedModule extends Module {
-  final String position;
+  final ModulePosition position;
 
-  PositionedModule({this.position});
+  PositionedModule(int id, String module, ModulePosition pos) :
+    position = pos,
+    super(id, module);
 
   factory PositionedModule.fromJson(Map<String, dynamic> json) {
-    return PositionedModule(position: json['position']);
+    return PositionedModule(json['_meta']['id'], json['module'],
+        modulePositionFromString(json['position']));
+  }
+
+  @override
+  String toString() {
+    return "{id:$id, module:$module, position:${position.toString()}}";
   }
 }
 
-class ModuleAlert extends Module {}
+class ModuleAlert extends Module {
+  ModuleAlert(int id, String module) : super(id, module);
+  static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
+}
 
-class ModuleClock extends PositionedModule {}
+class ModuleClock extends PositionedModule {
+  ModuleClock(int id, String module, ModulePosition pos)
+      : super(id, module, pos);
+  static instantiate(Map<String, dynamic> json) =>
+      PositionedModule.fromJson(json);
+}
+
+class ModuleCompliments extends PositionedModule {
+  ModuleCompliments(int id, String module, ModulePosition pos)
+      : super(id, module, pos);
+  static instantiate(Map<String, dynamic> json) =>
+      PositionedModule.fromJson(json);
+}
+
+class ModuleIP extends PositionedModule {
+  ModuleIP(int id, String module, ModulePosition pos) : super(id, module, pos);
+  static instantiate(Map<String, dynamic> json) =>
+      PositionedModule.fromJson(json);
+}
+
+class ModuleUpdateNotification extends PositionedModule {
+  ModuleUpdateNotification(int id, String module, ModulePosition pos)
+      : super(id, module, pos);
+  static instantiate(Map<String, dynamic> json) =>
+      PositionedModule.fromJson(json);
+}
+
+class ModuleNewsfeed extends PositionedModule {
+  final bool showPublishDate;
+  final bool showSourceTitle;
+  final List<dynamic> feeds;
+
+  ModuleNewsfeed(
+      id, module, position, _showPublishDate, _showSourceTitle, _feeds)
+      : showPublishDate = _showPublishDate,
+        showSourceTitle = _showSourceTitle,
+        feeds = _feeds,
+        super(id, module, position);
+
+  factory ModuleNewsfeed.fromJson(Map<String, dynamic> json) {
+    return ModuleNewsfeed(
+      json['_meta']['id'],
+      json['module'],
+      modulePositionFromString(json['position']),
+      json['config']['showPublishDate'],
+      json['config']['showSourceTitle'],
+      json['config']['feeds'],
+    );
+  }
+
+  static instantiate(Map<String, dynamic> json) =>
+      ModuleNewsfeed.fromJson(json);
+
+  @override
+  String toString() {
+    return "{id:$id, module:$module, position:${position.toString()}, " +
+        "showPublishDate: $showPublishDate, " +
+        "showSourceTitle: $showSourceTitle, " +
+        "feeds: ${feeds.toString()}}";
+  }
+}
+
+class ModuleCalendar extends PositionedModule {
+  final String header;
+  final List<dynamic> calendars;
+
+  ModuleCalendar(id, module, position, _header, _calendars)
+      : header = _header,
+        calendars = _calendars,
+        super(id, module, position);
+
+  factory ModuleCalendar.fromJson(Map<String, dynamic> json) {
+    return ModuleCalendar(
+      json['_meta']['id'],
+      json['module'],
+      modulePositionFromString(json['position']),
+      json['header'],
+      json['config']['calendars'],
+    );
+  }
+
+  static instantiate(Map<String, dynamic> json) =>
+      ModuleCalendar.fromJson(json);
+
+  @override
+  String toString() {
+    return "{id:$id, module:$module, position:${position.toString()}, " +
+        "header: $header, " +
+        "calendars: ${calendars.toString()}}";
+  }
+}
 
 class ModulePirSensor extends PositionedModule {
   final bool powerSavingNotification;
   final int sensorPin;
   final int powerSavingDelay;
 
-  ModulePirSensor(
-      {this.powerSavingNotification, this.sensorPin, this.powerSavingDelay});
+  ModulePirSensor(id, module, position, _powerSavingNotification, _sensorPin,
+      _powerSavingDelay)
+      : powerSavingNotification = _powerSavingNotification,
+        powerSavingDelay = _powerSavingDelay,
+        sensorPin = _sensorPin,
+        super(id, module, position);
 
   factory ModulePirSensor.fromJson(Map<String, dynamic> json) {
     return ModulePirSensor(
-      powerSavingNotification: json['config']['powerSavingNotification'],
-      sensorPin: json['config']['sensorPin'],
-      powerSavingDelay: json['config']['powerSavingDelay'],
+      json['_meta']['id'],
+      json['module'],
+      modulePositionFromString(json['position']),
+      json['config']['powerSavingNotification'],
+      json['config']['sensorPin'],
+      json['config']['powerSavingDelay'],
     );
+  }
+
+  static instantiate(Map<String, dynamic> json) =>
+      ModulePirSensor.fromJson(json);
+
+  @override
+  String toString() {
+    return "{id:$id, module:$module, position:${position.toString()}, " +
+        "powerSavingNotification: $powerSavingNotification, " +
+        "sensorPin: $sensorPin, powerSavingDelay: $powerSavingDelay}";
   }
 }

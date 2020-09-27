@@ -48,18 +48,18 @@ class _ModuleOverviewState extends State<ModuleOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Module overview')),
       body: FutureBuilder<Module>(
         future: futureModule,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Text(snapshot.data.module);
+            //return Text(snapshot.data.toString());
+            return ListView(children: snapshot.data.widgets);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
 
           // By default, show a loading spinner.
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         },
       ),
     );
