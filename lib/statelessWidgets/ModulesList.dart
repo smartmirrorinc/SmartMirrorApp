@@ -61,20 +61,49 @@ class _ModulesListState extends State<ModulesList> {
 }
 
 Widget _buildList(MmmpServer server, List<Module> modules) {
-  return ListView.builder(
-      itemCount: modules.length,
-      padding: EdgeInsets.all(16.0),
-      itemBuilder: (context, i) {
-        return ListTile(
-          title: Text("${modules[i].id}: ${modules[i].module}"),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ModuleOverviewApp(server: server, module: modules[i])),
-            );
-          },
-        );
+  return Builder(builder: (context) {
+      // Create map where keys is each populated position and values is the
+      // modules in that position
+      Map<ModulePosition, List<Module>> sortedModules = new Map<ModulePosition, List<Module>>();
+      modules.forEach((Module x) {
+          if (!sortedModules.containsKey(x.position)) {
+            sortedModules[x.position] = new List<Module>();
+          }
+          sortedModules[x.position].add(x);
       });
+
+      // Create a card for each populated position
+      List<Card> cards = List<Card>();
+      sortedModules.keys.forEach((ModulePosition p) {
+          // Create a clickable tile for each module in that position
+          List<ListTile> tiles = List<ListTile>();
+          sortedModules[p].forEach((Module m) {
+              tiles.add(ListTile(title: Text(m.module),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                        ModuleOverviewApp(server: server, module: m)),
+                    );
+                  },
+              ));
+          });
+
+          // Header for the card
+          String title = (p == null) ? "No position" : modulePositionToString(p);
+
+          // The card contains just one child: a ListTile where the title
+          // contains the header and the subtitle contains a Column of all the
+          // modules in that position
+          ListTile entry = ListTile(
+            title: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),
+            subtitle: Column(children: tiles));
+
+          cards.add(Card(child: Column(children: [entry])));
+      });
+
+      // Wrap the cards in a listview for scrollability
+      return ListView(children: cards);
+  });
 }
