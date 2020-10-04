@@ -90,11 +90,12 @@ class PositionedModule extends Module {
 
     Widget dropdown = getPosDropDown(refresh);
     Widget icon = Icon(Icons.picture_in_picture);
-    ListTile tile = ListTile(leading: icon, title: Text("Position"));
-    ListTile tile2 = ListTile(title: dropdown);
-    widgets.add(Card(
-        child:
-            Column(mainAxisSize: MainAxisSize.max, children: [tile, tile2])));
+    ListTile tile = ListTile(
+        leading: icon,
+        title: Text("Position", style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: dropdown);
+    widgets.add(
+        Card(child: Column(mainAxisSize: MainAxisSize.max, children: [tile])));
   }
 
   factory PositionedModule.fromJson(Map<String, dynamic> json) {
@@ -112,7 +113,7 @@ class PositionedModule extends Module {
       value: position,
       icon: Icon(Icons.arrow_downward),
       iconSize: 24,
-      elevation: 16,
+      isExpanded: true,
       style: TextStyle(color: Colors.deepPurple),
       underline: Container(
         height: 2,
