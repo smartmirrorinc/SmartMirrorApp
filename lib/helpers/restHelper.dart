@@ -13,7 +13,7 @@ Future<List<Module>> fetchModuleList(MmmpServer server) async {
     List<Module> modules = new List<Module>();
 
     data["modules"]
-        .forEach((x) => modules.add(Module(x["_meta"]["id"], x["module"])));
+        .forEach((x) => modules.add(moduleFromString(x)));
 
     modules.sort((a, b) => a.id.compareTo(b.id));
     return modules;
