@@ -35,6 +35,11 @@ enum ModulePosition {
   fullscreen_below
 }
 
+String modulePositionToString(ModulePosition pos) {
+  String tmp = pos.toString().substring(15).replaceAll("_", " ");
+  return "${tmp[0].toUpperCase()}${tmp.substring(1)}";
+}
+
 ModulePosition modulePositionFromString(String pos) {
   Iterable<ModulePosition> p = ModulePosition.values
       .where((x) => x.toString() == ("ModulePosition." + pos));
@@ -120,7 +125,7 @@ class PositionedModule extends Module {
       items: ModulePosition.values.map((ModulePosition value) {
         return DropdownMenuItem<ModulePosition>(
           value: value,
-          child: Text(value.toString()),
+          child: Text(modulePositionToString(value)),
         );
       }).toList(),
     );
