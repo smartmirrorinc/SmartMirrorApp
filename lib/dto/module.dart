@@ -72,8 +72,14 @@ class Module {
 
   void buildWidgets(Function refresh) {
     widgets = new List<Widget>();
-    widgets.add(ListTile(title: Text("ID: $id")));
-    widgets.add(ListTile(title: Text("Module: $module")));
+
+    widgets.add(Card(
+        child: Column(children: [
+      ListTile(
+          leading: Icon(Icons.info),
+          title: Text("Type", style: TextStyle(fontWeight: FontWeight.bold)),
+          subtitle: Text("$module (id $id)"))
+    ])));
   }
 }
 
