@@ -56,6 +56,7 @@ class Module {
   final int id;
   final String module;
   List<Widget> widgets;
+  ModulePosition position;
 
   Module(this.id, this.module);
 
@@ -84,11 +85,10 @@ class Module {
 }
 
 class PositionedModule extends Module {
-  ModulePosition position;
-
   PositionedModule(int id, String module, ModulePosition pos)
-      : position = pos,
-        super(id, module);
+      : super(id, module) {
+    position = pos;
+  }
 
   @override
   void buildWidgets(Function refresh) {
