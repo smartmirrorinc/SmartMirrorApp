@@ -11,6 +11,21 @@ class ModuleOverviewApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Create save button with a Builder to get a context we can refer to when
+    // displaying the snackbar
+    var btnBuilder = Builder(builder: (context) {
+      return FloatingActionButton(
+        child: Icon(Icons.save),
+        onPressed: () {
+          setModule("${widget.state.server.ip}:${widget.state.server.port}",
+              widget.state.module, () {
+            final snackBar = SnackBar(content: Text('Changes saved'));
+            Scaffold.of(context).showSnackBar(snackBar);
+          });
+        },
+      );
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.state.module.module),
@@ -18,13 +33,7 @@ class ModuleOverviewApp extends StatelessWidget {
       body: Center(
         child: this.widget,
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.save),
-        onPressed: () {
-          setModule("${widget.state.server.ip}:${widget.state.server.port}",
-              widget.state.module, () {});
-        },
-      ),
+      floatingActionButton: btnBuilder,
     );
   }
 }
