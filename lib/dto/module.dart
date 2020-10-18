@@ -82,6 +82,14 @@ class Module {
           subtitle: Text("$module (id $id)"))
     ])));
   }
+
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = Map<String, dynamic>();
+    json['_meta'] = Map<String, dynamic>();
+    json['_meta']['id'] = this.id;
+    json['module'] = this.module;
+    return json;
+  }
 }
 
 class PositionedModule extends Module {
@@ -136,6 +144,13 @@ class PositionedModule extends Module {
         );
       }).toList(),
     );
+  }
+
+  @override
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = super.toJson();
+    json['position'] = this.position.toString().substring(15);
+    return json;
   }
 }
 

@@ -31,3 +31,23 @@ void fetchModule(String remote, int id, Function callback) async {
     throw Exception('Failed to load module $id');
   }
 }
+
+void setModule(String remote, Module module, Function callback) async {
+  var url = "http://$remote/config/modules/${module.id}/";
+
+  Map<String, String> headers = {
+    'Content-type' : 'application/json',
+    'Accept': 'application/json',
+  };
+
+  Map<String, dynamic> moduleJson = module.toJson();
+  var body = json.encode({"action": "update", "value": moduleJson});
+
+  final response = await http.post(url, body: body, headers: headers);
+
+  if (response.statusCode == 200) {
+    callback();
+  } else {
+    throw Exception('Failed to set module ${module.id}');
+  }
+}

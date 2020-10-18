@@ -4,49 +4,62 @@ import 'package:smartmirror/helpers/discovery.dart';
 import 'package:smartmirror/helpers/restHelper.dart';
 
 class ModuleOverviewApp extends StatelessWidget {
-  final Module module;
-  final MmmpServer server;
+  final ModuleOverview widget;
 
-  ModuleOverviewApp({Key key, @required this.server, @required this.module})
-      : super(key: key);
+  ModuleOverviewApp({Key key, MmmpServer server, Module module})
+      : widget = ModuleOverview(server: server, module: module);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(module.module),
+        title: Text(widget.state.module.module),
       ),
       body: Center(
-        child: ModuleOverview(server: server, module: module),
+        child: this.widget,
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.save),
+        onPressed: () {
+          setModule("${widget.state.server.ip}:${widget.state.server.port}",
+              widget.state.module, () {});
+        },
       ),
     );
   }
 }
 
 class ModuleOverview extends StatefulWidget {
-  final Module module;
-  final MmmpServer server;
+  final _ModuleOverviewState state;
 
-  ModuleOverview({Key key, @required this.server, @required this.module})
-      : super(key: key);
+  ModuleOverview({Key key, MmmpServer server, Module module})
+      : state = _ModuleOverviewState(server, module),
+        super(key: key);
 
   @override
-  _ModuleOverviewState createState() => _ModuleOverviewState();
+  _ModuleOverviewState createState() {
+    return state;
+  }
 }
 
 class _ModuleOverviewState extends State<ModuleOverview> {
+  MmmpServer server;
   Module module;
+
+  _ModuleOverviewState(MmmpServer server, Module module) {
+    this.server = server;
+    this.module = module;
+  }
 
   @override
   void initState() {
     super.initState();
-    fetchModule(
-        "${widget.server.ip}:${widget.server.port}", widget.module.id, refresh);
+    fetchModule("${server.ip}:${server.port}", module.id, refresh);
   }
 
   void refresh(Module module) {
     setState(() {
-      this.module = module;
+      module = module;
     });
   }
 
@@ -55,7 +68,8 @@ class _ModuleOverviewState extends State<ModuleOverview> {
     return Builder(builder: (context) {
       if (module != null) {
         module.buildWidgets(refresh);
-        return ListView(children: module.widgets);
+        var widgets = module.widgets;
+        return ListView(children: widgets);
       } else {
         return Center(child: CircularProgressIndicator());
       }
