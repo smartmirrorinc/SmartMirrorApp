@@ -10,6 +10,8 @@ Module moduleFromString(Map<String, dynamic> json) {
     "compliments": ModuleCompliments.instantiate,
     "MMM-ip": ModuleIP.instantiate,
     "updatenotification": ModuleUpdateNotification.instantiate,
+    "currentweather": ModuleWeather.instantiate,
+    "weatherforecast": ModuleForecast.instantiate,
   };
 
   if (!modules.keys.contains(json["module"])) {
@@ -41,6 +43,10 @@ String modulePositionToString(ModulePosition pos) {
 }
 
 ModulePosition modulePositionFromString(String pos) {
+  if (pos == null) {
+    return null;
+  }
+
   Iterable<ModulePosition> p = ModulePosition.values
       .where((x) => x.toString() == ("ModulePosition." + pos));
 
@@ -152,6 +158,20 @@ class PositionedModule extends Module {
     json['position'] = this.position.toString().substring(15);
     return json;
   }
+}
+
+class ModuleForecast extends PositionedModule {
+  ModuleForecast(int id, String module, ModulePosition pos)
+      : super(id, module, pos);
+  static instantiate(Map<String, dynamic> json) =>
+      PositionedModule.fromJson(json);
+}
+
+class ModuleWeather extends PositionedModule {
+  ModuleWeather(int id, String module, ModulePosition pos)
+      : super(id, module, pos);
+  static instantiate(Map<String, dynamic> json) =>
+      PositionedModule.fromJson(json);
 }
 
 class ModuleAlert extends Module {

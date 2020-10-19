@@ -12,8 +12,7 @@ Future<List<Module>> fetchModuleList(MmmpServer server) async {
     Map<String, dynamic> data = json.decode(response.body);
     List<Module> modules = new List<Module>();
 
-    data["modules"]
-        .forEach((x) => modules.add(moduleFromString(x)));
+    data["modules"].forEach((x) => modules.add(moduleFromString(x)));
 
     modules.sort((a, b) => a.id.compareTo(b.id));
     return modules;
@@ -36,7 +35,7 @@ void setModule(String remote, Module module, Function callback) async {
   var url = "http://$remote/config/modules/${module.id}/";
 
   Map<String, String> headers = {
-    'Content-type' : 'application/json',
+    'Content-type': 'application/json',
     'Accept': 'application/json',
   };
 
