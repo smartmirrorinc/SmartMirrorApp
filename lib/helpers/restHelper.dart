@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-import 'package:smartmirror/dto/module.dart';
+import 'package:smartmirror/modules/Module.dart';
 import 'package:smartmirror/helpers/discovery.dart';
 
 Future<List<Module>> fetchModuleList(MmmpServer server) async {

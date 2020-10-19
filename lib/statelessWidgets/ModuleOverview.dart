@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartmirror/dto/module.dart';
+import 'package:smartmirror/modules/Module.dart';
 import 'package:smartmirror/helpers/discovery.dart';
 import 'package:smartmirror/helpers/restHelper.dart';
 
