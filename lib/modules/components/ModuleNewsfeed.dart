@@ -1,5 +1,17 @@
 part of components;
 
+// TODO: Any nice way to get a list of popular feeds?
+var knownFeeds = [
+  {"title": "DR", "url": "https://www.dr.dk/nyheder/service/feeds/allenyheder"},
+  {"title": "Ingeniøren", "url": "https://www.ing.dk/section/rss-all?mime=xml"},
+  {"title": "TV2 Øst", "url": "https://www.tv2east.dk/rss"},
+  {"title": "TV2 Nord", "url": "https://www.tv2nord.dk/rss"},
+  {"title": "BT", "url": "https://www.bt.dk/bt/seneste/rss"},
+  {"title": "Videnskab.dk", "url": "https://videnskab.dk/topic/all/rss"},
+  {"title": "Computerworld", "url": "https://www.computerworld.dk/rss/all"},
+  {"title": "Jyllands-Posten", "url": "https://jyllands-posten.dk/?service=rssfeed"},
+];
+
 class ModuleNewsfeed extends PositionedModule {
   bool showPublishDate;
   bool showSourceTitle;
@@ -74,12 +86,27 @@ class ModuleNewsfeed extends PositionedModule {
       )
     ])));
 
+    var knownFeedMenuItems = List<PopupMenuItem<String>>();
+    knownFeeds.forEach((x) {
+      if (feeds.where((feed) => feed["title"] == x["title"]).length == 0)
+        knownFeedMenuItems.add(
+            PopupMenuItem<String>(value: x["title"], child: Text(x["title"])));
+    });
+
     // "Feeds" header with icon and add button
-    // TODO: make add button actually do something
-    var feedsHeaderTile = ListTile(
-        leading: Icon(Icons.rss_feed),
-        title: Text("Feeds", style: TextStyle(fontWeight: FontWeight.bold)),
-        trailing: Icon(Icons.add));
+    // TODO: Add custom feed option
+    var feedsHeaderTile = PopupMenuButton(
+        child: ListTile(
+            leading: Icon(Icons.rss_feed),
+            title: Text("Feeds", style: TextStyle(fontWeight: FontWeight.bold)),
+            trailing: Icon(Icons.add)),
+        itemBuilder: (BuildContext context) => knownFeedMenuItems,
+        onSelected: (String x) {
+          var newfeed = knownFeeds.where((feed) => feed["title"] == x);
+          if (newfeed.length != 1) throw ("Invalid feed $x");
+          feeds.add(newfeed.first);
+          refresh(this);
+        });
 
     // List with each feed and menu button, click item to open menu
     var feedList = List<Widget>();
@@ -106,17 +133,12 @@ class ModuleNewsfeed extends PositionedModule {
       ));
     });
 
-    widgets.add(Card(
-        child: Column(
-      children: [
-        feedsHeaderTile,
-        // wrap feeds in scrollable listview
-        ListView(
-            children: feedList,
-            scrollDirection: Axis.vertical,
-            shrinkWrap: true)
-      ],
-    )));
+    var tiles = List<Widget>();
+    tiles.add(feedsHeaderTile);
+    feedList.forEach((x) => tiles.add(x));
+
+    widgets.add(
+        Card(child: SingleChildScrollView(child: Column(children: tiles))));
   }
 
   @override
