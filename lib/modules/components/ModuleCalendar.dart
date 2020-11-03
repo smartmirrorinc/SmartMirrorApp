@@ -28,4 +28,27 @@ class ModuleCalendar extends PositionedModule {
         "header: $header, " +
         "calendars: ${calendars.toString()}}";
   }
+
+  @override
+  void buildWidgets(Function refresh) {
+    super.buildWidgets(refresh);
+
+    widgets.add(Card(
+      child: Column(
+        children: [
+          ListTile(
+            leading: Icon(Icons.subtitles),
+            subtitle: Align(
+              child: TextField(
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "Calendar header",
+                    helperText: "Current value: " + header),
+              ),
+            ),
+          )
+        ],
+      ),
+    ));
+  }
 }
