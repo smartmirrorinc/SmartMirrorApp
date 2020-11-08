@@ -59,7 +59,8 @@ class PositionedModule extends Module {
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = super.toJson();
-    json['position'] = this.position.toString().substring(15);
+    if (this.position != null)
+      json['position'] = this.position.toString().substring(15);
     return json;
   }
 }

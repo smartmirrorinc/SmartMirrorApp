@@ -5,6 +5,7 @@ import 'package:smartmirror/helpers/discovery.dart';
 import 'package:smartmirror/helpers/restHelper.dart';
 
 import 'ModuleOverview.dart';
+import 'NewModuleList.dart';
 
 class ModulesListApp extends StatelessWidget {
   final MmmpServer server;
@@ -39,15 +40,33 @@ class _ModulesListState extends State<ModulesList> {
     futureModules = fetchModuleList(widget.server);
   }
 
+  void refresh() {
+    setState(() {
+      futureModules = fetchModuleList(widget.server);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Module list')),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) =>
+                      NewModuleListApp(server: widget.server))).then((x) {
+            refresh();
+          });
+        },
+        child: Icon(Icons.add),
+      ),
       body: FutureBuilder<List<Module>>(
         future: futureModules,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return _buildList(widget.server, snapshot.data);
+            return _buildList(widget.server, snapshot.data, refresh);
           } else if (snapshot.hasError) {
             return Text("${snapshot.error}");
           }
@@ -60,7 +79,7 @@ class _ModulesListState extends State<ModulesList> {
   }
 }
 
-Widget _buildList(MmmpServer server, List<Module> modules) {
+Widget _buildList(MmmpServer server, List<Module> modules, Function refresh) {
   return Builder(builder: (context) {
     // Create map where keys is each populated position and values is the
     // modules in that position
@@ -77,19 +96,40 @@ Widget _buildList(MmmpServer server, List<Module> modules) {
     List<Card> cards = List<Card>();
     sortedModules.keys.forEach((ModulePosition p) {
       // Create a clickable tile for each module in that position
-      List<ListTile> tiles = List<ListTile>();
+      List<Widget> tiles = List<Widget>();
       sortedModules[p].forEach((Module m) {
-        tiles.add(ListTile(
-          title: Text(m.module),
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      ModuleOverviewApp(server: server, module: m)),
-            );
-          },
-        ));
+        tiles.add(Dismissible(
+            background: Container(
+              color: Colors.red,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              alignment: AlignmentDirectional.centerStart,
+              child: Icon(
+                Icons.delete,
+                color: Colors.white,
+              ),
+            ),
+            key: Key(m.id.toString()),
+            onDismissed: (direction) {
+              // remove dismissible from tree
+              modules.removeWhere((x) => x.id == m.id);
+              deleteModule("${server.ip}:${server.port}", m, () {
+                refresh(); // refresh view in case a position section should disappear
+              });
+            },
+            child: ListTile(
+              title: Text(m.module),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ModuleOverviewApp(server: server, module: m)),
+                ).then((x) {
+                  // refresh view on return in case a module changes position
+                  refresh();
+                });
+              },
+            )));
       });
 
       // Header for the card

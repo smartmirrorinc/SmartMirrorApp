@@ -10,12 +10,29 @@ class ModuleCalendar extends PositionedModule {
         super(id, module, position);
 
   factory ModuleCalendar.fromJson(Map<String, dynamic> json) {
+    // defaults
+    String header = 'Calendar';
+    List<dynamic> calendars = [
+      {
+        "symbol": "calendar-check",
+        "url":
+            "webcal://www.calendarlabs.com/ical-calendar/ics/43/Denmark_Holidays.ics"
+      }
+    ];
+
+    if (json.containsKey("header")) {
+      header = json["header"];
+    }
+    if (json.containsKey("config") && json["config"].containsKey("calendars")) {
+      calendars = json["config"]["calendars"];
+    }
+
     return ModuleCalendar(
       json['_meta']['id'],
       json['module'],
       modulePositionFromString(json['position']),
-      json['header'],
-      json['config']['calendars'],
+      header,
+      calendars,
     );
   }
 

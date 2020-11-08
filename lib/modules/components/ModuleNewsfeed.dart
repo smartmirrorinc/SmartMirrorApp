@@ -25,13 +25,28 @@ class ModuleNewsfeed extends PositionedModule {
         super(id, module, position);
 
   factory ModuleNewsfeed.fromJson(Map<String, dynamic> json) {
+    bool showPublishDate = true;
+    bool showSourceTitle = true;
+    List<dynamic> feeds = [knownFeeds[0]];
+    if (json.containsKey("config")) {
+      if (json["config"].containsKey("showPublishDate")) {
+        showPublishDate = json['config']['showPublishDate'];
+      }
+      if (json["config"].containsKey("showSourceTitle")) {
+        showSourceTitle = json['config']['showSourceTitle'];
+      }
+      if (json["config"].containsKey("feeds")) {
+        feeds = json['config']['feeds'];
+      }
+    }
+
     return ModuleNewsfeed(
       json['_meta']['id'],
       json['module'],
       modulePositionFromString(json['position']),
-      json['config']['showPublishDate'],
-      json['config']['showSourceTitle'],
-      json['config']['feeds'],
+      showPublishDate,
+      showSourceTitle,
+      feeds,
     );
   }
 

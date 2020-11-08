@@ -21,6 +21,17 @@ Future<List<Module>> fetchModuleList(MmmpServer server) async {
   }
 }
 
+Future<List<dynamic>> fetchAvailableModules(MmmpServer server) async {
+  final response =
+      await http.get('http://${server.ip}:${server.port}/manage/listmodules/');
+
+  if (response.statusCode == 200) {
+    return json.decode(response.body)["value"];
+  } else {
+    throw Exception('Failed to get list of available modules');
+  }
+}
+
 void fetchModule(String remote, int id, Function callback) async {
   final response = await http.get('http://$remote/config/modules/$id/');
 
@@ -28,6 +39,50 @@ void fetchModule(String remote, int id, Function callback) async {
     callback(moduleFromString(json.decode(response.body)["value"]));
   } else {
     throw Exception('Failed to load module $id');
+  }
+}
+
+void addModule(String remote, String module, Function callback) async {
+  var url = "http://$remote/config/modules/";
+
+  Map<String, String> headers = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+  };
+
+  var body = json.encode({
+    "action": "add",
+    "value": {"module": module}
+  });
+
+  final response = await http.post(url, body: body, headers: headers);
+
+  if (response.statusCode == 200) {
+    callback();
+  } else {
+    throw Exception('Failed to add module ${module.toString()}');
+  }
+}
+
+void deleteModule(String remote, Module module, Function callback) async {
+  var url = "http://$remote/config/modules/${module.id}/";
+
+  Map<String, String> headers = {
+    'Content-type': 'application/json',
+    'Accept': 'application/json',
+  };
+
+  var body = json.encode({
+    "action": "delete",
+    "value": {"module": module.toJson()}
+  });
+
+  final response = await http.post(url, body: body, headers: headers);
+
+  if (response.statusCode == 200) {
+    callback();
+  } else {
+    throw Exception('Failed to delete module ${module.toString()}');
   }
 }
 

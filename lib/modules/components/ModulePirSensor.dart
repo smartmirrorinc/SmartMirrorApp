@@ -13,13 +13,30 @@ class ModulePirSensor extends PositionedModule {
         super(id, module, position);
 
   factory ModulePirSensor.fromJson(Map<String, dynamic> json) {
+    bool powerSavingNotification = false;
+    int sensorPin = 23;
+    int powerSavingDelay = 300;
+
+    if (json.containsKey("config")) {
+      if (json["config"].containsKey("powerSavingDelay")) {
+        powerSavingDelay = json["config"]["powerSavingDelay"];
+      }
+      if (json["config"].containsKey("sensorPin")) {
+        sensorPin = json["config"]["sensorPin"];
+      }
+      if (json["config"].containsKey("powerSavingNotification")) {
+        powerSavingNotification = json["config"]["powerSavingNotification"];
+      }
+    }
+
+
     return ModulePirSensor(
       json['_meta']['id'],
       json['module'],
       modulePositionFromString(json['position']),
-      json['config']['powerSavingNotification'],
-      json['config']['sensorPin'],
-      json['config']['powerSavingDelay'],
+      powerSavingNotification,
+      sensorPin,
+      powerSavingDelay,
     );
   }
 
