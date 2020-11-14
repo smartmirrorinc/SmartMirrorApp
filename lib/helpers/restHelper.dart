@@ -32,6 +32,18 @@ Future<List<dynamic>> fetchAvailableModules(MmmpServer server) async {
   }
 }
 
+enum ServerAction { hdmi_on, start, stop, restart }
+
+void executeAction(MmmpServer server, ServerAction action) async {
+  String actionstr = action.toString().substring(13);
+  final response =
+      await http.get('http://${server.ip}:${server.port}/manage/$actionstr/');
+
+  if (response.statusCode != 200) {
+    throw Exception('Failed to execute action "$actionstr"');
+  }
+}
+
 void fetchModule(String remote, int id, Function callback) async {
   final response = await http.get('http://$remote/config/modules/$id/');
 

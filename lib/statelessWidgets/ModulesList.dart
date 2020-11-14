@@ -49,7 +49,26 @@ class _ModulesListState extends State<ModulesList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Module list')),
+      appBar: AppBar(
+        title: Text('Module list'),
+        actions: <Widget>[
+          PopupMenuButton<String>(
+            onSelected: (String value) {
+              if (value == 'restart') {
+                executeAction(widget.server, ServerAction.restart);
+              }
+            },
+            itemBuilder: (BuildContext context) {
+              return {'restart'}.map((String choice) {
+                return PopupMenuItem<String>(
+                  value: 'restart',
+                  child: Text('Restart MagicMirror²'),
+                );
+              }).toList();
+            },
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.push(
