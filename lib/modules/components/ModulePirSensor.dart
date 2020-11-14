@@ -1,5 +1,8 @@
 part of components;
 
+// TODO: expose powerSavingDelay, powerSavingNotification (does this actually
+// work?)
+
 class ModulePirSensor extends PositionedModule {
   final bool powerSavingNotification;
   final int sensorPin;
