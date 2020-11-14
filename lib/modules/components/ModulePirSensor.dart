@@ -3,7 +3,7 @@ part of components;
 // TODO: expose powerSavingDelay, powerSavingNotification (does this actually
 // work?)
 
-class ModulePirSensor extends PositionedModule {
+class ModulePirSensor extends Module {
   final bool powerSavingNotification;
   final int sensorPin;
   final int powerSavingDelay;
@@ -13,7 +13,7 @@ class ModulePirSensor extends PositionedModule {
       : powerSavingNotification = _powerSavingNotification,
         powerSavingDelay = _powerSavingDelay,
         sensorPin = _sensorPin,
-        super(id, module, position);
+        super(id, module);
 
   factory ModulePirSensor.fromJson(Map<String, dynamic> json) {
     bool powerSavingNotification = false;
