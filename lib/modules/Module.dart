@@ -16,7 +16,7 @@ Module moduleFromString(Map<String, dynamic> json) {
   };
 
   if (!modules.keys.contains(json["module"])) {
-    return null;
+    return ModuleAnonymous(json);
   } else {
     return modules[json["module"]](json);
   }
