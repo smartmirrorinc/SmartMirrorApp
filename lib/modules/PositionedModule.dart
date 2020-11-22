@@ -9,8 +9,8 @@ class PositionedModule extends Module {
   }
 
   @override
-  void buildWidgets(Function refresh) {
-    super.buildWidgets(refresh);
+  void buildWidgets(BuildContext context, Function refresh) {
+    super.buildWidgets(context, refresh);
 
     Widget dropdown = getPosDropDown(refresh);
     Widget icon = Icon(Icons.picture_in_picture);

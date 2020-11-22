@@ -76,7 +76,7 @@ class _ModuleOverviewState extends State<ModuleOverview> {
   Widget build(BuildContext context) {
     return Builder(builder: (context) {
       if (module != null) {
-        module.buildWidgets(refresh);
+        module.buildWidgets(context, refresh);
         var widgets = module.widgets;
         return ListView(children: widgets);
       } else {

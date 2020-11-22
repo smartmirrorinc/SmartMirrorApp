@@ -58,7 +58,7 @@ class Module {
 
   static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
 
-  void buildWidgets(Function refresh) {
+  void buildWidgets(BuildContext context, Function refresh) {
     widgets = new List<Widget>();
 
     widgets.add(Card(

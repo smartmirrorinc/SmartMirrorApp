@@ -62,8 +62,8 @@ class ModuleNewsfeed extends PositionedModule {
   }
 
   @override
-  void buildWidgets(Function refresh) {
-    super.buildWidgets(refresh);
+  void buildWidgets(BuildContext context, Function refresh) {
+    super.buildWidgets(context, refresh);
 
     // Checkbox to toggle "show publish date"
     widgets.add(Card(
