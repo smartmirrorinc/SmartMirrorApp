@@ -16,7 +16,7 @@ class PositionedModule extends Module {
     Widget icon = Icon(Icons.picture_in_picture);
     ListTile tile = ListTile(
         leading: icon,
-        title: Text("Position", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text("Module position", style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: dropdown);
     widgets.add(
         Card(child: Column(mainAxisSize: MainAxisSize.max, children: [tile])));

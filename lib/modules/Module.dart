@@ -13,6 +13,7 @@ Module moduleFromString(Map<String, dynamic> json) {
     "updatenotification": ModuleUpdateNotification.instantiate,
     "currentweather": ModuleWeather.instantiate,
     "weatherforecast": ModuleForecast.instantiate,
+    "MMM-DarkSkyForecast": ModuleDarkSkyForecast.instantiate,
   };
 
   if (!modules.keys.contains(json["module"])) {
