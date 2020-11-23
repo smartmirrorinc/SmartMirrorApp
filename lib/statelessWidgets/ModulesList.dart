@@ -1,8 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:smartmirror/modules/Module.dart';
-import 'package:smartmirror/helpers/discovery.dart';
-import 'package:smartmirror/helpers/restHelper.dart';
+import 'package:smartmirror/helpers/MmmpServer.dart';
 
 import 'ModuleOverview.dart';
 import 'NewModuleList.dart';
@@ -37,12 +36,12 @@ class _ModulesListState extends State<ModulesList> {
   @override
   void initState() {
     super.initState();
-    futureModules = fetchModuleList(widget.server);
+    futureModules = widget.server.config.getModules();
   }
 
   void refresh() {
     setState(() {
-      futureModules = fetchModuleList(widget.server);
+      futureModules = widget.server.config.getModules();
     });
   }
 
@@ -55,7 +54,7 @@ class _ModulesListState extends State<ModulesList> {
           PopupMenuButton<String>(
             onSelected: (String value) {
               if (value == 'restart') {
-                executeAction(widget.server, ServerAction.restart);
+                widget.server.manage.restart();
               }
             },
             itemBuilder: (BuildContext context) {
@@ -131,7 +130,8 @@ Widget _buildList(MmmpServer server, List<Module> modules, Function refresh) {
             onDismissed: (direction) {
               // remove dismissible from tree
               modules.removeWhere((x) => x.id == m.id);
-              deleteModule("${server.ip}:${server.port}", m, () {
+
+              server.config.deleteModule(module: m).then((x) {
                 refresh(); // refresh view in case a position section should disappear
               });
             },

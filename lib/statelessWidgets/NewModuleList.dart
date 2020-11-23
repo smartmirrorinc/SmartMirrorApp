@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:smartmirror/helpers/discovery.dart';
-import 'package:smartmirror/helpers/restHelper.dart';
+import 'package:smartmirror/helpers/MmmpServer.dart';
 
 class NewModuleListApp extends StatelessWidget {
   final MmmpServer server;
@@ -34,7 +33,7 @@ class _NewModuleListState extends State<NewModuleList> {
   @override
   void initState() {
     super.initState();
-    futureAvailableModules = fetchAvailableModules(widget.server);
+    futureAvailableModules = widget.server.manage.listmodules();
   }
 
   @override
@@ -61,8 +60,7 @@ class _NewModuleListState extends State<NewModuleList> {
           return ListTile(
             title: Text("${modules[i]}"),
             onTap: () {
-              addModule("${widget.server.ip}:${widget.server.port}", modules[i],
-                  () {
+              widget.server.config.addModule(moduleType: modules[i]).then((x) {
                 Navigator.pop(context);
               });
             },

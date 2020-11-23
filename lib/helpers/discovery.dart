@@ -1,26 +1,19 @@
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:multicast_dns/multicast_dns.dart';
-
-class MmmpServer {
-  final String host;
-  final String ip;
-  final int port;
-
-  MmmpServer({this.host, this.ip, this.port});
-}
+import 'package:smartmirror/helpers/MmmpServer.dart';
 
 Future<void> discoverServers(Function callback) async {
   const String name = '_mmmp._tcp';
 
   // https://github.com/flutter/flutter/issues/27346
-  var factory =
+  var socketFactory =
       (dynamic host, int port, {bool reuseAddress, bool reusePort, int ttl}) {
     return RawDatagramSocket.bind(host, port,
         reuseAddress: true, reusePort: false, ttl: ttl);
   };
 
-  var client = MDnsClient(rawDatagramSocketFactory: factory);
+  var client = MDnsClient(rawDatagramSocketFactory: socketFactory);
   await client.start();
 
   int found = 0;

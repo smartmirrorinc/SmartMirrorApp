@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartmirror/modules/Module.dart';
-import 'package:smartmirror/helpers/discovery.dart';
-import 'package:smartmirror/helpers/restHelper.dart';
+import 'package:smartmirror/helpers/MmmpServer.dart';
 
 class ModuleOverviewApp extends StatelessWidget {
   final ModuleOverview widget;
@@ -17,8 +16,7 @@ class ModuleOverviewApp extends StatelessWidget {
       return FloatingActionButton(
         child: Icon(Icons.save),
         onPressed: () {
-          setModule("${widget.state.server.ip}:${widget.state.server.port}",
-              widget.state.module, () {
+          widget.state.server.config.setModule(module: widget.state.module).then((x) {
             final snackBar = SnackBar(content: Text('Changes saved'));
             Scaffold.of(context).showSnackBar(snackBar);
           });
@@ -63,7 +61,9 @@ class _ModuleOverviewState extends State<ModuleOverview> {
   @override
   void initState() {
     super.initState();
-    fetchModule("${server.ip}:${server.port}", module.id, refresh);
+    server.config.getModule(id: module.id).then((module) {
+      refresh(module);
+    });
   }
 
   void refresh(Module module) {
