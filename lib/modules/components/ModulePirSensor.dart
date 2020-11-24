@@ -8,12 +8,12 @@ class ModulePirSensor extends Module {
   final int sensorPin;
   final int powerSavingDelay;
 
-  ModulePirSensor(id, module, position, _powerSavingNotification, _sensorPin,
-      _powerSavingDelay)
+  ModulePirSensor(id, order, module, position, _powerSavingNotification,
+      _sensorPin, _powerSavingDelay)
       : powerSavingNotification = _powerSavingNotification,
         powerSavingDelay = _powerSavingDelay,
         sensorPin = _sensorPin,
-        super(id, module);
+        super(id, order, module);
 
   factory ModulePirSensor.fromJson(Map<String, dynamic> json) {
     bool powerSavingNotification = false;
@@ -32,9 +32,9 @@ class ModulePirSensor extends Module {
       }
     }
 
-
     return ModulePirSensor(
       json['_meta']['id'],
+      json['_meta']['order'],
       json['module'],
       modulePositionFromString(json['position']),
       powerSavingNotification,
@@ -48,7 +48,7 @@ class ModulePirSensor extends Module {
 
   @override
   String toString() {
-    return "{id:$id, module:$module, position:${position.toString()}, " +
+    return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "powerSavingNotification: $powerSavingNotification, " +
         "sensorPin: $sensorPin, powerSavingDelay: $powerSavingDelay}";
   }

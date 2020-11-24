@@ -4,10 +4,10 @@ class ModuleCalendar extends PositionedModule {
   final String header;
   final List<dynamic> calendars;
 
-  ModuleCalendar(id, module, position, _header, _calendars)
+  ModuleCalendar(id, order, module, position, _header, _calendars)
       : header = _header,
         calendars = _calendars,
-        super(id, module, position);
+        super(id, order, module, position);
 
   factory ModuleCalendar.fromJson(Map<String, dynamic> json) {
     // defaults
@@ -29,6 +29,7 @@ class ModuleCalendar extends PositionedModule {
 
     return ModuleCalendar(
       json['_meta']['id'],
+      json['_meta']['order'],
       json['module'],
       modulePositionFromString(json['position']),
       header,
@@ -41,7 +42,7 @@ class ModuleCalendar extends PositionedModule {
 
   @override
   String toString() {
-    return "{id:$id, module:$module, position:${position.toString()}, " +
+    return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "header: $header, " +
         "calendars: ${calendars.toString()}}";
   }

@@ -6,13 +6,13 @@ class ModuleDarkSkyForecast extends PositionedModule {
   String apikey;
   GoogleMapController mapController;
 
-  ModuleDarkSkyForecast(id, module, position, _latitude, _longitude,
+  ModuleDarkSkyForecast(id, order, module, position, _latitude, _longitude,
       _hourlyForecastInterval, _apikey)
       : latitude = _latitude,
         longitude = _longitude,
         hourlyForecastInterval = _hourlyForecastInterval,
         apikey = _apikey,
-        super(id, module, position);
+        super(id, order, module, position);
 
   factory ModuleDarkSkyForecast.fromJson(Map<String, dynamic> json) {
     double latitude = 57.048820;
@@ -37,6 +37,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
 
     return ModuleDarkSkyForecast(
         json['_meta']['id'],
+        json['_meta']['order'],
         json['module'],
         modulePositionFromString(json['position']),
         latitude,
@@ -50,7 +51,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
 
   @override
   String toString() {
-    return "{id:$id, module:$module, position:${position.toString()}, " +
+    return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "latitude: $latitude, " +
         "longitude: $longitude, " +
         "hourlyForecastInterval: $hourlyForecastInterval, " +
@@ -150,7 +151,6 @@ class ModuleDarkSkyForecast extends PositionedModule {
               );
               refresh(this);
             },
-
             child: Text('Pick location'),
           ),
         ],

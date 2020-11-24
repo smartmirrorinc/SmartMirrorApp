@@ -6,7 +6,10 @@ class ModuleAnonymous extends Module {
   final Map<String, dynamic> json;
   ModuleAnonymous(Map<String, dynamic> _json)
       : json = _json,
-      super(_json["_meta"]["id"], _json["module"]);
+        super(
+            _json["_meta"]["id"],
+            _json["_meta"]["order"],
+            _json["module"]);
 
   @override
   Map<String, dynamic> toJson() {
@@ -15,6 +18,6 @@ class ModuleAnonymous extends Module {
 
   @override
   String toString() {
-    return "{id:$id, module:$module, json:$json}";
+    return "{id:$id, order:$order, module:$module, json:$json}";
   }
 }

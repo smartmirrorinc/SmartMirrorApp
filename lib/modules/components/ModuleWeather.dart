@@ -10,8 +10,8 @@ part of components;
 // https://docs.magicmirror.builders/modules/currentweather.html
 
 class ModuleWeather extends PositionedModule {
-  ModuleWeather(int id, String module, ModulePosition pos)
-      : super(id, module, pos);
+  ModuleWeather(int id, int order, String module, ModulePosition pos)
+      : super(id, order, module, pos);
   static instantiate(Map<String, dynamic> json) =>
       PositionedModule.fromJson(json);
 }

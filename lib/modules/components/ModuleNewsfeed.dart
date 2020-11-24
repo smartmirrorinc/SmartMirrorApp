@@ -18,11 +18,11 @@ class ModuleNewsfeed extends PositionedModule {
   List<dynamic> feeds;
 
   ModuleNewsfeed(
-      id, module, position, _showPublishDate, _showSourceTitle, _feeds)
+      id, order, module, position, _showPublishDate, _showSourceTitle, _feeds)
       : showPublishDate = _showPublishDate,
         showSourceTitle = _showSourceTitle,
         feeds = _feeds,
-        super(id, module, position);
+        super(id, order, module, position);
 
   factory ModuleNewsfeed.fromJson(Map<String, dynamic> json) {
     bool showPublishDate = true;
@@ -42,6 +42,7 @@ class ModuleNewsfeed extends PositionedModule {
 
     return ModuleNewsfeed(
       json['_meta']['id'],
+      json['_meta']['order'],
       json['module'],
       modulePositionFromString(json['position']),
       showPublishDate,
@@ -55,7 +56,7 @@ class ModuleNewsfeed extends PositionedModule {
 
   @override
   String toString() {
-    return "{id:$id, module:$module, position:${position.toString()}, " +
+    return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "showPublishDate: $showPublishDate, " +
         "showSourceTitle: $showSourceTitle, " +
         "feeds: ${feeds.toString()}}";

@@ -42,19 +42,23 @@ enum ModulePosition {
 class Module {
   final int id;
   final String module;
+  int order = 0;
   List<Widget> widgets;
   //TODO: Why does a Module have a ModulePosition?
   ModulePosition position;
 
-  Module(this.id, this.module);
+  Module(this.id, this.order, this.module);
 
   factory Module.fromJson(Map<String, dynamic> json) {
-    return Module(json['_meta']['id'], json['module']);
+    return Module(
+        json['_meta']['id'],
+        json['_meta']['order'],
+        json['module']);
   }
 
   @override
   String toString() {
-    return "{id:$id, module:$module}";
+    return "{id:$id, order:$order, module:$module}";
   }
 
   static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
@@ -67,7 +71,7 @@ class Module {
       ListTile(
           leading: Icon(Icons.info),
           title: Text("Type", style: TextStyle(fontWeight: FontWeight.bold)),
-          subtitle: Text("$module (id $id)"))
+          subtitle: Text("$module (id $id, order $order)"))
     ])));
   }
 
@@ -75,6 +79,7 @@ class Module {
     Map<String, dynamic> json = Map<String, dynamic>();
     json['_meta'] = Map<String, dynamic>();
     json['_meta']['id'] = this.id;
+    json['_meta']['order'] = this.order;
     json['module'] = this.module;
     return json;
   }

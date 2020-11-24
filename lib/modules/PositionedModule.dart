@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'Module.dart';
 
 class PositionedModule extends Module {
-  PositionedModule(int id, String module, ModulePosition pos)
-      : super(id, module) {
+  PositionedModule(int id, int order, String module, ModulePosition pos)
+      : super(id, order, module) {
     position = pos;
   }
 
@@ -16,20 +16,24 @@ class PositionedModule extends Module {
     Widget icon = Icon(Icons.picture_in_picture);
     ListTile tile = ListTile(
         leading: icon,
-        title: Text("Module position", style: TextStyle(fontWeight: FontWeight.bold)),
+        title: Text("Module position",
+            style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: dropdown);
     widgets.add(
         Card(child: Column(mainAxisSize: MainAxisSize.max, children: [tile])));
   }
 
   factory PositionedModule.fromJson(Map<String, dynamic> json) {
-    return PositionedModule(json['_meta']['id'], json['module'],
+    return PositionedModule(
+        json['_meta']['id'],
+        json['_meta']['order'],
+        json['module'],
         modulePositionFromString(json['position']));
   }
 
   @override
   String toString() {
-    return "{id:$id, module:$module, position:${position.toString()}}";
+    return "{id:$id, order:$order, module:$module, position:${position.toString()}}";
   }
 
   Widget getPosDropDown(Function refresh) {
