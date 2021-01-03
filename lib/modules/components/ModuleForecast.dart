@@ -27,5 +27,15 @@ class ModuleForecast extends PositionedModule {
   ModuleForecast(int id, int order, String module, ModulePosition pos)
       : super(id, order, module, pos);
   static instantiate(Map<String, dynamic> json) =>
-      PositionedModule.fromJson(json);
+      ModuleForecast.fromJson(json);
+
+  factory ModuleForecast.fromJson(Map<String, dynamic> json) {
+    return ModuleForecast(json['_meta']['id'], json['_meta']['order'],
+        json['module'], modulePositionFromString(json['position']));
+  }
+
+  @override
+  String get name {
+    return "Basic weather forecast";
+  }
 }

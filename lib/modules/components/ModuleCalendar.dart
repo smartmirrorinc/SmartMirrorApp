@@ -48,6 +48,11 @@ class ModuleCalendar extends PositionedModule {
   }
 
   @override
+  String get name {
+    return "Event list";
+  }
+
+  @override
   void buildWidgets(BuildContext context, Function refresh) {
     super.buildWidgets(context, refresh);
 

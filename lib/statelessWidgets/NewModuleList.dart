@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:smartmirror/helpers/MmmpServer.dart';
+import 'package:smartmirror/modules/Module.dart';
 
 class NewModuleListApp extends StatelessWidget {
   final MmmpServer server;
@@ -52,13 +53,17 @@ class _NewModuleListState extends State<NewModuleList> {
             }));
   }
 
+  String _getModuleName(String module) {
+    return moduleFromString({'module': module, '_meta': {'id': 0}}).name;
+  }
+
   Widget _buildList(List<dynamic> modules) {
     Widget w = ListView.builder(
         itemCount: modules.length,
         padding: EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
           return ListTile(
-            title: Text("${modules[i]}"),
+            title: Text("${_getModuleName(modules[i])}"),
             onTap: () {
               widget.server.config.addModule(moduleType: modules[i]).then((x) {
                 Navigator.pop(context);

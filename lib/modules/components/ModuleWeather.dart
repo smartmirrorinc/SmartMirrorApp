@@ -12,6 +12,15 @@ part of components;
 class ModuleWeather extends PositionedModule {
   ModuleWeather(int id, int order, String module, ModulePosition pos)
       : super(id, order, module, pos);
-  static instantiate(Map<String, dynamic> json) =>
-      PositionedModule.fromJson(json);
+  static instantiate(Map<String, dynamic> json) => ModuleWeather.fromJson(json);
+
+  factory ModuleWeather.fromJson(Map<String, dynamic> json) {
+    return ModuleWeather(json['_meta']['id'], json['_meta']['order'],
+        json['module'], modulePositionFromString(json['position']));
+  }
+
+  @override
+  String get name {
+    return "Basic current weather";
+  }
 }

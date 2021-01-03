@@ -190,7 +190,7 @@ class _ModulesListState extends State<ModulesList> {
                         });
                       },
                       child: ListTile(
-                        title: Text(m.module),
+                        title: Text(m.name),
                         onTap: () {
                           // when a tile is clicked, go to the respective
                           // configuration view

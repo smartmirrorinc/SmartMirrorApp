@@ -61,6 +61,10 @@ class Module {
     return "{id:$id, order:$order, module:$module}";
   }
 
+  String get name {
+    return module;
+  }
+
   static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
 
   void buildWidgets(BuildContext context, Function refresh) {
@@ -86,8 +90,12 @@ class Module {
 }
 
 String modulePositionToString(ModulePosition pos) {
-  String tmp = pos.toString().substring(15).replaceAll("_", " ");
-  return "${tmp[0].toUpperCase()}${tmp.substring(1)}";
+  if (pos == null) {
+    return "No position";
+  } else {
+    String tmp = pos.toString().substring(15).replaceAll("_", " ");
+    return "${tmp[0].toUpperCase()}${tmp.substring(1)}";
+  }
 }
 
 ModulePosition modulePositionFromString(String pos) {

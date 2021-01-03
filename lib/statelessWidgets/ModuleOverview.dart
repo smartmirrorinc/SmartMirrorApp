@@ -26,7 +26,7 @@ class ModuleOverviewApp extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.state.module.module),
+        title: Text(widget.state.module.name),
       ),
       body: Center(
         child: this.widget,

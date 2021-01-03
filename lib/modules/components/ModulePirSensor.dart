@@ -47,6 +47,11 @@ class ModulePirSensor extends Module {
       ModulePirSensor.fromJson(json);
 
   @override
+  String get name {
+    return "Movement sensor";
+  }
+
+  @override
   String toString() {
     return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "powerSavingNotification: $powerSavingNotification, " +

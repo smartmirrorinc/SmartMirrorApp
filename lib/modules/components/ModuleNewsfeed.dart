@@ -55,6 +55,11 @@ class ModuleNewsfeed extends PositionedModule {
       ModuleNewsfeed.fromJson(json);
 
   @override
+  String get name {
+    return "Newsfeed";
+  }
+
+  @override
   String toString() {
     return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "showPublishDate: $showPublishDate, " +

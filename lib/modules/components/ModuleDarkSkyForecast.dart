@@ -50,6 +50,11 @@ class ModuleDarkSkyForecast extends PositionedModule {
       ModuleDarkSkyForecast.fromJson(json);
 
   @override
+  String get name {
+    return "Advanced weather";
+  }
+
+  @override
   String toString() {
     return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
         "latitude: $latitude, " +
