@@ -10,6 +10,7 @@ var knownFeeds = [
   {"title": "Videnskab.dk", "url": "https://videnskab.dk/topic/all/rss"},
   {"title": "Computerworld", "url": "https://www.computerworld.dk/rss/all"},
   {"title": "Jyllands-Posten", "url": "https://jyllands-posten.dk/?service=rssfeed"},
+  {"title": "From URL..."}
 ];
 
 class ModuleNewsfeed extends PositionedModule {
@@ -115,7 +116,6 @@ class ModuleNewsfeed extends PositionedModule {
     });
 
     // "Feeds" header with icon and add button
-    // TODO: Add custom feed option
     var feedsHeaderTile = PopupMenuButton(
         child: ListTile(
             leading: Icon(Icons.rss_feed),
@@ -125,8 +125,31 @@ class ModuleNewsfeed extends PositionedModule {
         onSelected: (String x) {
           var newfeed = knownFeeds.where((feed) => feed["title"] == x);
           if (newfeed.length != 1) throw ("Invalid feed $x");
-          feeds.add(newfeed.first);
-          refresh(this);
+          if (newfeed.first.containsKey("url")) {
+            feeds.add(newfeed.first);
+            refresh(this);
+          } else {
+            showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text('Add feed'),
+                  content: Card(
+                    elevation: 0.0,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        TextField(
+                          decoration: InputDecoration(
+                            labelText: "Feed URL"),
+                          onSubmitted: (String value) {
+                            feeds.add({"title": "Custom", "url": value});
+                            refresh(this);
+                            Navigator.pop(context); // dismiss popup
+                        })
+                ])));
+            });
+          }
         });
 
     // List with each feed and menu button, click item to open menu
@@ -137,7 +160,6 @@ class ModuleNewsfeed extends PositionedModule {
           title: Text(feed['title'],
               style: TextStyle(fontWeight: FontWeight.bold)),
           subtitle: Text(feed['url']),
-          trailing: Icon(Icons.menu),
         ),
         itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
           const PopupMenuItem<String>(
