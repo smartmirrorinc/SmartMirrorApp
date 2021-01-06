@@ -5,7 +5,8 @@ class Widgeteer {
   List<Widget> widgets;
 
   void addModifiableTextField(
-      Icon, leadingIcon, String labelText, String helperText) {
+      Icon leadingIcon, String labelText, String helperText) {
+    //TODO: Implement onChange function
     widgets.add(Card(
       child: Column(
         children: [
@@ -23,5 +24,19 @@ class Widgeteer {
         ],
       ),
     ));
+  }
+
+  void addCheckbox(Icon leadingIcon, String titleText, bool defaultValue,
+      Function onChanged) {
+    widgets.add(Card(
+        child: Column(children: [
+      ListTile(
+        leading: leadingIcon,
+        title: Text(titleText, style: TextStyle(fontWeight: FontWeight.bold)),
+        subtitle: Align(
+            child: Checkbox(value: defaultValue, onChanged: onChanged),
+            alignment: Alignment.centerLeft),
+      )
+    ])));
   }
 }
