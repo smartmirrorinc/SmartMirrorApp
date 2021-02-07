@@ -4,9 +4,8 @@ import 'package:flutter/widgets.dart';
 class Widgeteer {
   List<Widget> widgets;
 
-  void addModifiableTextField(
-      Icon leadingIcon, String labelText, String helperText) {
-    //TODO: Implement onChange function
+  void addModifiableTextField(Icon leadingIcon, String labelText,
+      String helperText, Function onChanged) {
     widgets.add(Card(
       child: Column(
         children: [
@@ -18,6 +17,7 @@ class Widgeteer {
                     border: OutlineInputBorder(),
                     labelText: labelText,
                     helperText: helperText),
+                onChanged: onChanged,
               ),
             ),
           )
