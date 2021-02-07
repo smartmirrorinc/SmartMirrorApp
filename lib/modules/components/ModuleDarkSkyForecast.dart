@@ -135,8 +135,20 @@ class ModuleDarkSkyForecast extends PositionedModule {
           // Button to open location picker
           RaisedButton(
             onPressed: () async {
+
+              // TODO: wrap nicely
+              final RemoteConfig remoteConfig = await RemoteConfig.instance;
+
+              final defaults = <String, dynamic>{
+                'APIKEY_GOOGLE_MAPS': 'NO_API_KEY'};
+              await remoteConfig.setDefaults(defaults);
+
+              await remoteConfig.fetch(expiration: const Duration(hours: 5));
+              await remoteConfig.activateFetched();
+              // --
+
               LocationResult result = await showLocationPicker(context,
-                  "PUT_GOOGLE_MAPS_API_KEY_HERE", // TODO: app-specific key
+                  remoteConfig.getString('APIKEY_GOOGLE_MAPS'),
                   initialCenter: LatLng(56.224288, 11.195565), // ~mid Denmark
                   automaticallyAnimateToCurrentLocation: false,
                   myLocationButtonEnabled: true,
