@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:smartmirror/builder/Widgeteer.dart';
 import 'components/components.dart';
 
 Module moduleFromString(Map<String, dynamic> json) {
@@ -39,7 +40,7 @@ enum ModulePosition {
   fullscreen_below
 }
 
-class Module {
+class Module extends Widgeteer {
   final int id;
   final String module;
   int order = 0;

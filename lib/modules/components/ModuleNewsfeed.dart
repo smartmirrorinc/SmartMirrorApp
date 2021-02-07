@@ -73,40 +73,18 @@ class ModuleNewsfeed extends PositionedModule {
     super.buildWidgets(context, refresh);
 
     // Checkbox to toggle "show publish date"
-    widgets.add(Card(
-        child: Column(children: [
-      ListTile(
-        leading: Icon(Icons.date_range),
-        title: Text("Show publish date",
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Align(
-            child: Checkbox(
-                value: showPublishDate,
-                onChanged: (x) {
-                  showPublishDate = x;
-                  refresh(this);
-                }),
-            alignment: Alignment.centerLeft),
-      )
-    ])));
+    addCheckbox(Icon(Icons.date_range), "Show publish date", showPublishDate,
+        (x) {
+      showPublishDate = x;
+      refresh(this);
+    });
 
     // Checkbox to toggle "show source title"
-    widgets.add(Card(
-        child: Column(children: [
-      ListTile(
-        leading: Icon(Icons.subtitles),
-        title: Text("Show source title",
-            style: TextStyle(fontWeight: FontWeight.bold)),
-        subtitle: Align(
-            child: Checkbox(
-                value: showSourceTitle,
-                onChanged: (x) {
-                  showSourceTitle = x;
-                  refresh(this);
-                }),
-            alignment: Alignment.centerLeft),
-      )
-    ])));
+    addCheckbox(Icon(Icons.subtitles), "Show source title", showSourceTitle,
+        (x) {
+      showSourceTitle = x;
+      refresh(this);
+    });
 
     var knownFeedMenuItems = List<PopupMenuItem<String>>();
     knownFeeds.forEach((x) {
