@@ -86,7 +86,7 @@ class ModuleNewsfeed extends PositionedModule {
       refresh(this);
     });
 
-    var knownFeedMenuItems = List<PopupMenuItem<String>>();
+    var knownFeedMenuItems = List<PopupMenuItem<String>>.empty(growable: true);
     knownFeeds.forEach((x) {
       if (feeds.where((feed) => feed["title"] == x["title"]).length == 0)
         knownFeedMenuItems.add(
@@ -131,7 +131,7 @@ class ModuleNewsfeed extends PositionedModule {
         });
 
     // List with each feed and menu button, click item to open menu
-    var feedList = List<Widget>();
+    var feedList = List<Widget>.empty(growable: true);
     feeds.forEach((feed) {
       feedList.add(PopupMenuButton(
         child: ListTile(
@@ -154,7 +154,7 @@ class ModuleNewsfeed extends PositionedModule {
       ));
     });
 
-    var tiles = List<Widget>();
+    var tiles = List<Widget>.empty(growable: true);
     tiles.add(feedsHeaderTile);
     feedList.forEach((x) => tiles.add(x));
 

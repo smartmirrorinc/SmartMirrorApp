@@ -18,7 +18,7 @@ class ModuleOverviewApp extends StatelessWidget {
         onPressed: () {
           widget.state.server.config.setModule(module: widget.state.module).then((x) {
             final snackBar = SnackBar(content: Text('Changes saved'));
-            Scaffold.of(context).showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           });
         },
       );

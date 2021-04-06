@@ -2,7 +2,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 Future<http.Response> get(String url) async {
-  return http.get(url);
+  return http.get(Uri.parse(url));
 }
 
 Future<http.Response> postJson(String url, dynamic data) {
@@ -12,5 +12,5 @@ Future<http.Response> postJson(String url, dynamic data) {
   };
 
   var body = json.encode(data);
-  return http.post(url, body: body, headers: headers);
+  return http.post(Uri.parse(url), body: body, headers: headers);
 }

@@ -76,7 +76,7 @@ class _ServerListState extends State<ServerList> {
   Future<void> _refresh() async {
     setState(() {
       // clear the list
-      servers = new List<MmmpServer>();
+      servers = new List<MmmpServer>.empty(growable: true);
 
       // attempt to discover...
       discoverServers((x) {
