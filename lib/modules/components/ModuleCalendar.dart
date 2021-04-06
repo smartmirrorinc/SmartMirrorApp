@@ -84,7 +84,7 @@ class ModuleCalendar extends PositionedModule {
         });
 
     // List with each cal, click item to open menu
-    var calList = List<Widget>();
+    var calList = List<Widget>.empty(growable: true);
     calendars.forEach((cal) {
       calList.add(PopupMenuButton(
         child: ListTile(
@@ -105,7 +105,7 @@ class ModuleCalendar extends PositionedModule {
       ));
     });
 
-    var tiles = List<Widget>();
+    var tiles = List<Widget>.empty(growable: true);
     tiles.add(calsHeaderTile);
     calList.forEach((x) => tiles.add(x));
 

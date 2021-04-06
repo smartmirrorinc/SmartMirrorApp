@@ -133,7 +133,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
               height: 200),
 
           // Button to open location picker
-          RaisedButton(
+          ElevatedButton(
             onPressed: () async {
 
               // TODO: wrap nicely
