@@ -140,13 +140,13 @@ class _ModulesListState extends State<ModulesList> {
           new Map<ModulePosition, List<Module>>();
       modules.forEach((Module x) {
         if (!sortedModules.containsKey(x.position)) {
-          sortedModules[x.position] = new List<Module>();
+          sortedModules[x.position] = List<Module>.empty(growable: true);
         }
         sortedModules[x.position].add(x);
       });
 
       // Keep track of lists for future reference (when reordering)
-      _modulePositions = List<ModulePosition>();
+      _modulePositions = List<ModulePosition>.empty(growable: true);
       _sortedModules = sortedModules;
 
       // Get list of keys in sortedModules, sorted alphabetically. Objective is
@@ -156,7 +156,7 @@ class _ModulesListState extends State<ModulesList> {
         ..sort((a, b) => a.toString().compareTo(b.toString()));
 
       // Create a DragAndDropList for each populated position
-      var lists = List<DragAndDropList>();
+      var lists = List<DragAndDropList>.empty(growable: true);
       sortedKeys.forEach((ModulePosition p) {
         // Keep track of those positions
         _modulePositions.add(p);
@@ -166,7 +166,7 @@ class _ModulesListState extends State<ModulesList> {
 
         // Create a clickable, draggable, dissmissible tile for each module in
         // that position
-        var items = List<DragAndDropItem>();
+        var items = List<DragAndDropItem>.empty(growable: true);
         sortedModules[p].forEach((Module m) {
           items.add(DragAndDropItem(
               child: Padding(
@@ -222,6 +222,7 @@ class _ModulesListState extends State<ModulesList> {
       return DragAndDropLists(
         children: lists,
         onItemReorder: _onItemReorder,
+        onListReorder: (int oldListIndex, int newListIndex) {},
         listPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         itemDivider: Divider(
           thickness: 2,
@@ -246,13 +247,6 @@ class _ModulesListState extends State<ModulesList> {
         lastItemTargetHeight: 8,
         addLastItemTargetHeightToTop: true,
         lastListTargetSize: 40,
-        dragHandle: Padding(
-          padding: EdgeInsets.only(right: 10),
-          child: Icon(
-            Icons.menu,
-            color: Colors.black26,
-          ),
-        ),
       );
     });
   }

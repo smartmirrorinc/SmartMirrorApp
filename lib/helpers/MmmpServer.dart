@@ -36,7 +36,7 @@ class _Config {
   Future<List<Module>> getModules() async {
     final data = _toJson(await restHelper.get(url + "modules/"));
 
-    List<Module> modules = new List<Module>();
+    List<Module> modules = new List<Module>.empty(growable: true);
     data["modules"].forEach((x) => modules.add(moduleFromString(x)));
     modules.sort((a, b) => a.id.compareTo(b.id));
 

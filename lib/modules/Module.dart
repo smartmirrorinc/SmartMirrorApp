@@ -69,7 +69,7 @@ class Module extends Widgeteer {
   static instantiate(Map<String, dynamic> json) => Module.fromJson(json);
 
   void buildWidgets(BuildContext context, Function refresh) {
-    widgets = new List<Widget>();
+    widgets = new List<Widget>.empty(growable: true);
 
     widgets.add(Card(
         child: Column(children: [

@@ -133,7 +133,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
               height: 200),
 
           // Button to open location picker
-          RaisedButton(
+          ElevatedButton(
             onPressed: () async {
               LocationResult result = await showLocationPicker(context,
                   "PUT_GOOGLE_MAPS_API_KEY_HERE", // TODO: app-specific key
