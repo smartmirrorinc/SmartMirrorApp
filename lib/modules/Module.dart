@@ -48,7 +48,13 @@ class Module extends Widgeteer {
   //TODO: Why does a Module have a ModulePosition?
   ModulePosition position;
 
-  Module(this.id, this.order, this.module);
+  Module(id, order, module)
+      : id = id,
+        module = module,
+        order = (order == null ? 0 : order) {
+    if (this.id == null) throw ArgumentError("Null id");
+    if (this.module == null) throw ArgumentError("Null module");
+  }
 
   factory Module.fromJson(Map<String, dynamic> json) {
     return Module(
