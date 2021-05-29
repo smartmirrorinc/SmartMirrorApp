@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:smartmirror/modules/Module.dart';
 import 'package:smartmirror/helpers/MmmpServer.dart';
+import 'package:smartmirror/builder/Widgeteer.dart';
 
 import 'ModuleOverview.dart';
 import 'NewModuleList.dart';

@@ -65,10 +65,8 @@ class _Config {
   }
 
   Future<void> setModule({@required Module module}) async {
-    final response = await restHelper.postJson(url + "modules/${module.id}/", {
-      "action": "update",
-      "value": module.toJson()
-    });
+    final response = await restHelper.postJson(url + "modules/${module.id}/",
+        {"action": "update", "value": module.toJson()});
     _checkOk(response);
   }
 }

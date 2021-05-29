@@ -24,22 +24,6 @@ Module moduleFromString(Map<String, dynamic> json) {
   }
 }
 
-enum ModulePosition {
-  top_bar,
-  top_left,
-  top_center,
-  top_right,
-  upper_third,
-  middle_center,
-  lower_third,
-  bottom_left,
-  bottom_center,
-  bottom_right,
-  bottom_bar,
-  fullscreen_above,
-  fullscreen_below
-}
-
 class Module extends Widgeteer {
   final int id;
   final String module;
@@ -57,10 +41,7 @@ class Module extends Widgeteer {
   }
 
   factory Module.fromJson(Map<String, dynamic> json) {
-    return Module(
-        json['_meta']['id'],
-        json['_meta']['order'],
-        json['module']);
+    return Module(json['_meta']['id'], json['_meta']['order'], json['module']);
   }
 
   @override
@@ -93,30 +74,5 @@ class Module extends Widgeteer {
     json['_meta']['order'] = this.order;
     json['module'] = this.module;
     return json;
-  }
-}
-
-String modulePositionToString(ModulePosition pos) {
-  if (pos == null) {
-    return "No position";
-  } else {
-    String tmp = pos.toString().substring(15).replaceAll("_", " ");
-    return "${tmp[0].toUpperCase()}${tmp.substring(1)}";
-  }
-}
-
-ModulePosition modulePositionFromString(String pos) {
-  if (pos == null) {
-    return null;
-  }
-
-  Iterable<ModulePosition> p = ModulePosition.values
-      .where((x) => x.toString() == ("ModulePosition." + pos));
-
-  if (p.length < 1) {
-    return null;
-  } else {
-    assert(p.length == 1);
-    return p.first;
   }
 }
