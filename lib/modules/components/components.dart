@@ -7,6 +7,7 @@ import 'package:smartmirror/modules/PositionedModule.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_config/flutter_config.dart';
 
 part "ModuleAlert.dart";
 part "ModuleAnonymous.dart";

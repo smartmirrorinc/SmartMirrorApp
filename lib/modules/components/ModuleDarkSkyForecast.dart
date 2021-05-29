@@ -18,7 +18,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
     double latitude = 57.048820;
     double longitude = 9.921747;
     int hourlyForecastInterval = 6;
-    String apikey = "";
+    String apikey = FlutterConfig.get('OPENWEATHERMAP_API_KEY');
 
     if (json.containsKey("config")) {
       if (json["config"].containsKey("latitude")) {
@@ -29,9 +29,6 @@ class ModuleDarkSkyForecast extends PositionedModule {
       }
       if (json["config"].containsKey("hourlyForecastInterval")) {
         hourlyForecastInterval = json['config']['hourlyForecastInterval'];
-      }
-      if (json["config"].containsKey("apikey")) {
-        apikey = json['config']['apikey'];
       }
     }
 
@@ -80,31 +77,6 @@ class ModuleDarkSkyForecast extends PositionedModule {
   void buildWidgets(BuildContext context, Function refresh) {
     super.buildWidgets(context, refresh);
 
-    // API key input field
-    widgets.add(Card(
-        child: Column(children: [
-      ListTile(
-          leading: Icon(Icons.vpn_key),
-          title: TextField(
-            onChanged: (String value) {
-              apikey = value;
-            },
-            style: TextStyle(fontSize: 12),
-            decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: "API key",
-                labelStyle: TextStyle(fontWeight: FontWeight.bold),
-                helperText: "Old value: " + capString(apikey)),
-          )),
-      ListTile(
-        leading: Icon(Icons.help),
-        title: Text("Where do I find my API key?"),
-        onTap: () async {
-          await launch("https://home.openweathermap.org/api_keys");
-        },
-      )
-    ])));
-
     // Location picker
     widgets.add(Card(
       child: Column(
@@ -136,7 +108,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
           ElevatedButton(
             onPressed: () async {
               LocationResult result = await showLocationPicker(context,
-                  "PUT_GOOGLE_MAPS_API_KEY_HERE", // TODO: app-specific key
+                  FlutterConfig.get('GOOGLE_MAPS_API_KEY'),
                   initialCenter: LatLng(56.224288, 11.195565), // ~mid Denmark
                   automaticallyAnimateToCurrentLocation: false,
                   myLocationButtonEnabled: true,
