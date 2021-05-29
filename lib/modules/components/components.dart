@@ -3,7 +3,7 @@ library components;
 import 'package:smartmirror/modules/Module.dart';
 import 'package:flutter/material.dart';
 import 'package:smartmirror/modules/PositionedModule.dart';
-import 'package:smartmirror/builder/Widgeteer.dart';
+import 'package:smartmirror/helpers/ModulePosition.dart';
 
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:smartmirror/builder/Widgeteer.dart';
+import 'package:smartmirror/helpers/ModulePosition.dart';
 
 import 'Module.dart';
 
 class PositionedModule extends Module {
+  ModulePosition position;
+
   PositionedModule(int id, int order, String module, ModulePosition pos)
       : super(id, order, module) {
     position = pos;
@@ -18,13 +20,23 @@ class PositionedModule extends Module {
     });
   }
 
+  @override
+  dynamic getPosition() {
+    return position;
+  }
+
+  @override
+  void setPosition(dynamic pos) {
+    position = pos;
+  }
+
   void refreshMe(Function refresh) {
     refresh(this);
   }
 
   factory PositionedModule.fromJson(Map<String, dynamic> json) {
     return PositionedModule(json['_meta']['id'], json['_meta']['order'],
-        json['module'], modulePositionFromString(json['position']));
+        json['module'], ModulePosition.fromString(json['position']));
   }
 
   @override
@@ -35,8 +47,7 @@ class PositionedModule extends Module {
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = super.toJson();
-    if (this.position != null)
-      json['position'] = this.position.toString().substring(15);
+    if (this.position != null) json['position'] = this.position.toJsonString();
     return json;
   }
 }

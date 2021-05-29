@@ -36,7 +36,7 @@ class ModulePirSensor extends Module {
       json['_meta']['id'],
       json['_meta']['order'],
       json['module'],
-      modulePositionFromString(json['position']),
+      ModulePosition.fromString(json['position']),
       powerSavingNotification,
       sensorPin,
       powerSavingDelay,
@@ -53,7 +53,7 @@ class ModulePirSensor extends Module {
 
   @override
   String toString() {
-    return "{id:$id, order:$order, module:$module, position:${position.toString()}, " +
+    return "{id:$id, order:$order, module:$module, " +
         "powerSavingNotification: $powerSavingNotification, " +
         "sensorPin: $sensorPin, powerSavingDelay: $powerSavingDelay}";
   }

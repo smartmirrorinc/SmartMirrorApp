@@ -7,7 +7,7 @@ class ModuleClock extends PositionedModule {
 
   factory ModuleClock.fromJson(Map<String, dynamic> json) {
     return ModuleClock(json['_meta']['id'], json['_meta']['order'],
-        json['module'], modulePositionFromString(json['position']));
+        json['module'], ModulePosition.fromString(json['position']));
   }
 
   @override

@@ -29,8 +29,6 @@ class Module extends Widgeteer {
   final String module;
   int order = 0;
   List<Widget> widgets;
-  //TODO: Why does a Module have a ModulePosition?
-  ModulePosition position;
 
   Module(id, order, module)
       : id = id,
@@ -42,6 +40,14 @@ class Module extends Widgeteer {
 
   factory Module.fromJson(Map<String, dynamic> json) {
     return Module(json['_meta']['id'], json['_meta']['order'], json['module']);
+  }
+
+  dynamic getPosition() {
+    return null;
+  }
+
+  void setPosition(dynamic pos) {
+    throw TypeError();
   }
 
   @override

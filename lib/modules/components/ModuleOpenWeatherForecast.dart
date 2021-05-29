@@ -36,7 +36,7 @@ class ModuleOpenWeatherForecast extends PositionedModule {
         json['_meta']['id'],
         json['_meta']['order'],
         json['module'],
-        modulePositionFromString(json['position']),
+        ModulePosition.fromString(json['position']),
         latitude,
         longitude,
         hourlyForecastInterval,

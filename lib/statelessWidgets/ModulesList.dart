@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:drag_and_drop_lists/drag_and_drop_lists.dart';
 import 'package:smartmirror/modules/Module.dart';
 import 'package:smartmirror/helpers/MmmpServer.dart';
-import 'package:smartmirror/builder/Widgeteer.dart';
+import 'package:smartmirror/helpers/ModulePosition.dart';
 
 import 'ModuleOverview.dart';
 import 'NewModuleList.dart';
@@ -107,21 +107,21 @@ class _ModulesListState extends State<ModulesList> {
     var module = _sortedModules[_modulePositions[oldListIndex]][oldItemIndex];
 
     // update position
-    if (module.position != _modulePositions[newListIndex]) {
+    if (module.getPosition() != _modulePositions[newListIndex]) {
       // remove from old position list
-      _sortedModules[module.position].remove(module);
+      _sortedModules[module.getPosition()].remove(module);
 
       // insert into new position list at appropriate index
-      module.position = _modulePositions[newListIndex];
-      _sortedModules[module.position].insert(newItemIndex, module);
+      module.setPosition(_modulePositions[newListIndex]);
+      _sortedModules[module.getPosition()].insert(newItemIndex, module);
     } else {
-      _sortedModules[module.position].remove(module);
-      _sortedModules[module.position].insert(newItemIndex, module);
+      _sortedModules[module.getPosition()].remove(module);
+      _sortedModules[module.getPosition()].insert(newItemIndex, module);
     }
 
     // update orders in position list
     int order = 100;
-    _sortedModules[module.position].forEach((Module x) {
+    _sortedModules[module.getPosition()].forEach((Module x) {
       x.order = order;
       order += 100;
       widget.server.config.setModule(module: x);
@@ -140,10 +140,10 @@ class _ModulesListState extends State<ModulesList> {
       Map<ModulePosition, List<Module>> sortedModules =
           new Map<ModulePosition, List<Module>>();
       modules.forEach((Module x) {
-        if (!sortedModules.containsKey(x.position)) {
-          sortedModules[x.position] = List<Module>.empty(growable: true);
+        if (!sortedModules.containsKey(x.getPosition())) {
+          sortedModules[x.getPosition()] = List<Module>.empty(growable: true);
         }
-        sortedModules[x.position].add(x);
+        sortedModules[x.getPosition()].add(x);
       });
 
       // Keep track of lists for future reference (when reordering)
@@ -209,7 +209,7 @@ class _ModulesListState extends State<ModulesList> {
         });
 
         // Header for the list
-        String title = (p == null) ? "No position" : modulePositionToString(p);
+        String title = (p == null) ? "No position" : p.toString();
 
         var entry = DragAndDropList(
             header: Text(title, style: TextStyle(fontWeight: FontWeight.bold)),

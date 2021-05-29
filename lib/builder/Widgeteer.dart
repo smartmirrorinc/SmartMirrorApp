@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:smartmirror/helpers/ModulePosition.dart';
 
 class Widgeteer {
   List<Widget> widgets;
@@ -57,64 +58,27 @@ class Widgeteer {
   }
 
   Widget getPosDropDown(ModulePosition position, Function onChanged) {
-    return DropdownButton<ModulePosition>(
-      value: position,
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
-      isExpanded: true,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: onChanged,
-      items: ModulePosition.values.map((ModulePosition value) {
-        return DropdownMenuItem<ModulePosition>(
-          value: value,
-          child: Text(modulePositionToString(value)),
-        );
-      }).toList(),
-    );
-  }
-}
-
-enum ModulePosition {
-  top_bar,
-  top_left,
-  top_center,
-  top_right,
-  upper_third,
-  middle_center,
-  lower_third,
-  bottom_left,
-  bottom_center,
-  bottom_right,
-  bottom_bar,
-  fullscreen_above,
-  fullscreen_below
-}
-
-ModulePosition modulePositionFromString(String pos) {
-  if (pos == null) {
-    return null;
-  }
-
-  Iterable<ModulePosition> p = ModulePosition.values
-      .where((x) => x.toString() == ("ModulePosition." + pos));
-
-  if (p.length < 1) {
-    return null;
-  } else {
-    assert(p.length == 1);
-    return p.first;
-  }
-}
-
-String modulePositionToString(ModulePosition pos) {
-  if (pos == null) {
-    return "No position";
-  } else {
-    String tmp = pos.toString().substring(15).replaceAll("_", " ");
-    return "${tmp[0].toUpperCase()}${tmp.substring(1)}";
+    // Dropdown must be based on enum, not ModulePosition instances, so grab
+    // ModulePosition.position as value and items, and convert to ModulePosition
+    // before returning via onChanged
+    return DropdownButton<Position>(
+        value: position.position,
+        icon: Icon(Icons.arrow_downward),
+        iconSize: 24,
+        isExpanded: true,
+        style: TextStyle(color: Colors.deepPurple),
+        underline: Container(
+          height: 2,
+          color: Colors.deepPurpleAccent,
+        ),
+        onChanged: (Position x) {
+          onChanged(ModulePosition(x));
+        },
+        items: ModulePosition.getPositions().map((ModulePosition pos) {
+          return DropdownMenuItem<Position>(
+            value: pos.position,
+            child: Text(pos.toString()),
+          );
+        }).toList());
   }
 }

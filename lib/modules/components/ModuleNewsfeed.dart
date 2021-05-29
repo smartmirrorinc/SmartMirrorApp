@@ -45,7 +45,7 @@ class ModuleNewsfeed extends PositionedModule {
       json['_meta']['id'],
       json['_meta']['order'],
       json['module'],
-      modulePositionFromString(json['position']),
+      ModulePosition.fromString(json['position']),
       showPublishDate,
       showSourceTitle,
       feeds,

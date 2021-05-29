@@ -16,7 +16,7 @@ class ModuleWeather extends PositionedModule {
 
   factory ModuleWeather.fromJson(Map<String, dynamic> json) {
     return ModuleWeather(json['_meta']['id'], json['_meta']['order'],
-        json['module'], modulePositionFromString(json['position']));
+        json['module'], ModulePosition.fromString(json['position']));
   }
 
   @override

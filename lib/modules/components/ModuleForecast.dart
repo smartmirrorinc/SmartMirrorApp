@@ -31,7 +31,7 @@ class ModuleForecast extends PositionedModule {
 
   factory ModuleForecast.fromJson(Map<String, dynamic> json) {
     return ModuleForecast(json['_meta']['id'], json['_meta']['order'],
-        json['module'], modulePositionFromString(json['position']));
+        json['module'], ModulePosition.fromString(json['position']));
   }
 
   @override

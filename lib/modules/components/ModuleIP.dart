@@ -9,7 +9,7 @@ class ModuleIP extends PositionedModule {
 
   factory ModuleIP.fromJson(Map<String, dynamic> json) {
     return ModuleIP(json['_meta']['id'], json['_meta']['order'], json['module'],
-        modulePositionFromString(json['position']));
+        ModulePosition.fromString(json['position']));
   }
 
   @override

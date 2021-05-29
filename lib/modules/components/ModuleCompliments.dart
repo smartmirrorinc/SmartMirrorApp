@@ -8,7 +8,7 @@ class ModuleCompliments extends PositionedModule {
 
   factory ModuleCompliments.fromJson(Map<String, dynamic> json) {
     return ModuleCompliments(json['_meta']['id'], json['_meta']['order'],
-        json['module'], modulePositionFromString(json['position']));
+        json['module'], ModulePosition.fromString(json['position']));
   }
 
   @override

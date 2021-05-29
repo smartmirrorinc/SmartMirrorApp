@@ -8,7 +8,7 @@ class ModuleUpdateNotification extends PositionedModule {
 
   factory ModuleUpdateNotification.fromJson(Map<String, dynamic> json) {
     return ModuleUpdateNotification(json['_meta']['id'], json['_meta']['order'],
-        json['module'], modulePositionFromString(json['position']));
+        json['module'], ModulePosition.fromString(json['position']));
   }
 
   @override
