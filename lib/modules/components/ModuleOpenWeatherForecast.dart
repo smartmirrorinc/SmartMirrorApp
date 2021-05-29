@@ -1,12 +1,12 @@
 part of components;
 
-class ModuleDarkSkyForecast extends PositionedModule {
+class ModuleOpenWeatherForecast extends PositionedModule {
   double latitude, longitude;
   int hourlyForecastInterval;
   String apikey;
   GoogleMapController mapController;
 
-  ModuleDarkSkyForecast(id, order, module, position, _latitude, _longitude,
+  ModuleOpenWeatherForecast(id, order, module, position, _latitude, _longitude,
       _hourlyForecastInterval, _apikey)
       : latitude = _latitude,
         longitude = _longitude,
@@ -14,7 +14,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
         apikey = _apikey,
         super(id, order, module, position);
 
-  factory ModuleDarkSkyForecast.fromJson(Map<String, dynamic> json) {
+  factory ModuleOpenWeatherForecast.fromJson(Map<String, dynamic> json) {
     double latitude = 57.048820;
     double longitude = 9.921747;
     int hourlyForecastInterval = 6;
@@ -32,7 +32,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
       }
     }
 
-    return ModuleDarkSkyForecast(
+    return ModuleOpenWeatherForecast(
         json['_meta']['id'],
         json['_meta']['order'],
         json['module'],
@@ -44,7 +44,7 @@ class ModuleDarkSkyForecast extends PositionedModule {
   }
 
   static instantiate(Map<String, dynamic> json) =>
-      ModuleDarkSkyForecast.fromJson(json);
+      ModuleOpenWeatherForecast.fromJson(json);
 
   @override
   String get name {

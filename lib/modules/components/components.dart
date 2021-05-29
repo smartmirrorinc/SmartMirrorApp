@@ -21,4 +21,4 @@ part "ModuleNewsfeed.dart";
 part "ModulePirSensor.dart";
 part "ModuleUpdateNotification.dart";
 part "ModuleWeather.dart";
-part "ModuleDarkSkyForecast.dart";
+part "ModuleOpenWeatherForecast.dart";
