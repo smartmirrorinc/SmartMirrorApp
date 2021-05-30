@@ -116,7 +116,7 @@ class ModuleCalendar extends PositionedModule {
   @override
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = super.toJson();
-    json['config'] = {'calendars': calendars};
+    json['config'] = {'calendars': calendars, 'getRelative': 8760};
     return json;
   }
 }
