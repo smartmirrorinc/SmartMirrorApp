@@ -1,1 +1,1 @@
--keep class com.smartmirror.BuildConfig { *; }
+-keep class com.example.smartmirror.BuildConfig { *; }
