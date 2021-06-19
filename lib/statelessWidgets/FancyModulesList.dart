@@ -1,17 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:fancy_bottom_navigation/fancy_bottom_navigation.dart';
-
-class MyFlutterApp {
-  MyFlutterApp._();
-
-  static const _kFontFam = 'MyFlutterApp';
-  static const String _kFontPkg = null;
-
-  static const IconData middle = IconData(0xe800, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData top = IconData(0xe801, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-  static const IconData bottom = IconData(0xe802, fontFamily: _kFontFam, fontPackage: _kFontPkg);
-}
+import 'package:smartmirror/fonts.dart';
 
 class SecondPage extends StatefulWidget {
   @override
@@ -72,7 +62,7 @@ int currentPage = 0;
         inactiveIconColor: Color.fromARGB(255, 253, 75, 29),
         tabs: [
           TabData(
-              iconData: MyFlutterApp.top,
+              iconData: SmartMirrorApp.top,
               title: "Top",
               onclick: () {
                 final FancyBottomNavigationState fState = bottomNavigationKey
@@ -80,11 +70,11 @@ int currentPage = 0;
                 fState.setPage(2);
               }),
           TabData(
-              iconData: MyFlutterApp.middle,
+              iconData: SmartMirrorApp.middle,
               title: "Middle",
               onclick: () => Navigator.of(context)
                   .push(MaterialPageRoute(builder: (context) => SecondPage()))),
-          TabData(iconData: MyFlutterApp.bottom, title: "Bottom")
+          TabData(iconData: SmartMirrorApp.bottom, title: "Bottom")
         ],
         initialSelection: 1,
         key: bottomNavigationKey,
